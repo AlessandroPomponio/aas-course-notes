@@ -27,6 +27,8 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: vinay0410/tectonic-action@b3138021657a3cdb3823f3980be054ca89e86d81
         uses: vinay0410/tectonic-action@v1.1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # Path of Tex File
           tex_path: 'main.tex'
