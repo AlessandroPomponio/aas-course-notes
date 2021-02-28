@@ -9,16 +9,13 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{hyperref}           % links
+\usepackage{wrapfig}            % Wrap figures
 \usepackage[
     backend=biber,
     style=alphabetic,
     sorting=ynt
 ]{biblatex}
-\usepackage[
-    type={CC},
-    modifier={by-nc-sa},
-    version={3.0},
-]{doclicense}
+
 
 % Bibliography
 \addbibresource{sources.bib}
@@ -49,7 +46,13 @@ Material used for these notes includes:
     \item Richard S. Sutton and Andrew G. Barto's ``Reinforcement Learning, An Introduction'' book, available here: \url{http://incompleteideas.net/book/RLbook2020.pdf}
 \end{itemize}
 
-\doclicenseThis
+\begin{wrapfigure}{r}{0.5\textwidth}
+\centering
+\includegraphics[width=.9\linewidth]{Images/by-nc-sa.eu.png}
+\end{wrapfigure}
+
+This work is licensed under a \href{https://creativecommons.org/licenses/by-nc-sa/3.0/}{Creative Commons ``Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)''} license.
+
 \clearpage
 
 % Content from the chapters
