@@ -1,0 +1,63 @@
+% Document information
+\documentclass[12pt]{article}
+
+% Usepackage
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}            % Paragraph formatting
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{hyperref}           % links
+\usepackage[
+    backend=biber,
+    style=alphabetic,
+    sorting=ynt
+]{biblatex}
+\usepackage[
+    type={CC},
+    modifier={by-nc-sa},
+    version={3.0},
+]{doclicense}
+
+% Bibliography
+\addbibresource{sources.bib}
+
+% Images folder
+\graphicspath{ {./Images/} }
+
+% Metadata
+\title{Autonomous and Adaptive Systems \\
+        course notes\\
+        University of Bologna \\
+        \large	 prof. Mirco Musolesi \\
+        AY. 2020-2021}
+\author{Alessandro Pomponio}
+\date{February 2021}
+
+% Content
+\begin{document}
+
+% Put the title on its own page
+\maketitle
+\clearpage
+
+% Disclaimer and intro
+Material used for these notes includes:
+\begin{itemize}
+    \item Prof. Musolesi's slides, available here: \url{https://www.mircomusolesi.org/courses/AAS20-21/AAS20-21-main/}
+    \item Richard S. Sutton and Andrew G. Barto's ``Reinforcement Learning, An Introduction'' book, available here: \url{http://incompleteideas.net/book/RLbook2020.pdf}
+\end{itemize}
+
+\doclicenseThis
+\clearpage
+
+% Content from the chapters
+\input{Chapters/01 - Intelligent Agents}
+\input{Chapters/02 - Introduction to Reinforcement Learning}
+
+% Bibliography
+\clearpage
+\printbibliography
+
+\end{document}
