@@ -58,7 +58,7 @@ A \textbf{policy} is used to model how the agent will behave based on the previo
 
 \textbf{The value function of a state s under a policy $\pi$}, denoted $v_\pi (s)$, is the expected return when starting in $s$ and following $\pi$ thereafter (the expected return I can have in the future state, considering all the actions I might take from there). For Markov Decision Processes, we can define \textbf{the state-value function} $v_\pi$ for the policy $\pi$ formally as:
 \begin{equation}
-    v_s \doteq \mathbb{E}_\pi \left[ G_t \vert S_t = s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty}  \gamma^k R_{t+k+1} \middle\vert S_t = s, A_t = a \right] \quad \forall s \in \mathcal{S}
+    v_s \doteq \mathbb{E}_\pi \left[ G_t  \ \vert \  S_t = s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty}  \gamma^k R_{t+k+1} \  \middle\vert \  S_t = s, A_t = a \right] \quad \forall s \in \mathcal{S}
     \label{eq:ch2-statevaluefunction}
 \end{equation}
 
@@ -66,11 +66,80 @@ Where $\mathbb{E}_\pi [\cdot]$ denotes the expected value of a random variable g
 
 Similar to what we just did, we can define \textbf{the action-value function}, i.e., the value of taking an action $a$ in the state $s$ under a policy $\pi$, denoted $q_\pi (s,a)$, as the expected return starting from $s$, taking the action $a$, and following the policy $\pi$ thereafter:
 \begin{equation}
-    q_\pi(s,a) \doteq \mathbb{E}_\pi \left[ G_t \vert S_t = s, A_t = a \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle\vert S_t = s, A_t = a \right]
+    q_\pi(s,a) \doteq \mathbb{E}_\pi \left[ G_t \  \vert \  S_t = s, A_t = a \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \  \middle\vert \ S_t = s, A_t = a \right]
     \label{eq:ch2-actionvaluefunction}
 \end{equation}
 
 \subsection{Choosing the rewards}
-When we model a real system as a reinforcement learning problem, the most difficult task is selecting the right rewards. Typically, we use negative values for actions that do not help us in reaching our goal, and positive if they do (it is also possible using 0 as a value for actions that do not help us). An alternative is to set the values of rewards to a negative number until we reach our goal (using 0 as the value when we reach it).
+When we model a real system as a reinforcement learning problem, the most difficult task is selecting the right rewards. Typically, we use negative values for actions that do not help us in reaching our goal, and positive if they do (it is also possible using 0 as a value for actions that do not help us). An alternative is to set the values of the rewards to a negative number until we reach our goal (using 0 as the value when we reach it).
 
-When choosing the rewards, it is very important that \textbf{we should not ``reward'' the intermediate steps or the single actions}. The agent, in fact, always learns to maximize its reward. If we want it to do something for us, we must provide rewards to it in such a way that in maximizing them the agent will also achieve our goals. It is thus critical that the rewards we set up truly indicate what we want accomplished. If we were to give importance to certain sub-goals, the agent might find a way to achieve them without achieving the real goal (e.g., taking the opponent's pieces while playing chess but losing the game). Note that the reward signal is our way of communicating to the agent \textit{what} we want achieved, not \textit{how} a better place for imparting this kind of prior knowledge would be the initial policy or the initial value function.
+When choosing the rewards, it is very important that \textbf{we should not ``reward'' the intermediate steps or the single actions}. The agent, in fact, always learns to maximize its reward. If we want it to do something for us, we must provide rewards to it in such a way that in maximizing them the agent will also achieve our goals. It is thus critical that the rewards we set up truly indicate what we want accomplished. If we were to give importance to certain sub-goals, the agent might find a way to achieve them without achieving the real goal (e.g., taking the opponent's pieces while playing chess but losing the game). Note that the reward signal is our way of communicating to the agent \textit{what} we want achieved, not \textit{how} (a better place for imparting this kind of prior knowledge would be the initial policy or the initial value function).
+
+Giving rewards to the agent could be a challenging task, as we will see from the two examples that follow. Let us first imagine that we want to create an agent that completes a maze in the least time possible: we could give a reward of -1 for every step it takes inside the maze and 0 for reaching the exit. This could work even if we assume that we only have one episode to base our rewards on. There are situations, though, in which we need additional information to quantify how good an action is for us, like in a game of chess, where we can only assign the rewards at the end of the game (e.g., assigning 1 to every step if we won, -1 if we lost). This is usually called \textbf{credit assignment problem} (i.e., the problem of assigning a reward to each step) and a discussion on it can be found in Marvin Minsky’s ``Steps Towards Artificial Intelligence'' paper \cite{4066245}.
+
+We now need to think about how we can solve this problem and estimate the value functions $v_\pi$ and $q_\pi$. If the behavior of the Markov Decision Process is known (i.e., the transition probabilities between all the states are known), we could do so by considering all the possible moves, although this poses strict requirements in terms of prior knowledge and system complexity. A more general option is to estimate them through experience: if an agent follows policy $\pi$ and maintains an average, for each state encountered, of the actual returns that have followed that state, then the average will converge asymptotically to the state’s value, $v_\pi(s)$, as the number of times that state is encountered approaches infinity (these methods are referred to as \textbf{Monte Carlo methods} because they involve averaging over many random samples of actual returns). This option is still problematic when it comes to very large number of states, though, as it would involve keeping separate averages for each state individually. In those cases, instead, we will maintain $v_\pi$ and $q_\pi$ as parametrized functions, with fewer parameters than the number of states, using approximators such as artificial neural networks.
+
+\subsection{Optimal policies and optimal value functions}
+Solving a reinforcement learning task is roughly equivalent to finding a policy that maximizes the amount of reward over the long run. In finite Markov Decision Processes, there is always at least one policy $\pi$ that is better than or equal to all the other policies, meaning that its expected return is greater than or equal to that of a different policy $\pi'$ for all states. More formally:
+\begin{equation*}
+    \pi \ge \pi' \text{ if and only if } v_\pi(s) \ge v_{\pi'} (s) \quad \forall s \in \mathcal{S}
+\end{equation*}
+
+Although there may be more than one, we denote all the optimal policies with $\pi_*$. They share the same state-value function, called the \textbf{optimal state-value function}, denoted $v_*$ and defined as:
+\begin{equation}
+    v_*(s) \doteq \max_\pi v_\pi(s) \quad \forall s \in \mathcal{S}
+    \label{eq:ch2-optimalstatevaluefunction}
+\end{equation}
+
+This means that, given a state and the value function, the optimal policy is the one that gives us the maximum reward. The same goes for the \textbf{optimal action-value function}, denoted $q_*$ and defined as:
+\begin{equation}
+    q_*(s,a) \doteq \max_\pi q_\pi(s,a) \quad \forall s \in \mathcal{S}, a \in \mathcal{A}(s)
+    \label{eq:ch2-optimalactionvaluefunction}
+\end{equation}
+
+For the state-action pair $(s,a)$, this function gives the expected return for taking the action $a$ in the state $s$ and thereafter following an optimal policy. Thus, we can write $q_*$ in terms of $v_*$ as follows:
+\begin{equation*}
+    q_*(s,a) = \mathbb{E} \left[ R_{t+1} + \gamma v_* S_{t+1} \  \middle\vert \ S_t = s, A_t = a \right]
+\end{equation*}
+
+\subsection{Optimality and approximation}
+\subsubsection{Bellman equation}
+What we are doing is closely related to the issues of automatic control: we both want to have knowledge and control over the evolution of a system.
+
+For any policy $\pi$ and any state $s$, the following consistency condition holds between the value of $s$ and the value of its possible successor states:
+\begin{equation}
+    \begin{split}
+        v_\pi(s) & \doteq \mathbb{E}_\pi \left[ G_t \ \vert \ S_t = s \right] \\
+        & = \mathbb{E}_\pi \left[ R_{t+1} + \gamma G_{t+1} \ \vert \ S_t = s \right] \\
+        & = \sum_{a} \pi(a \vert s) \sum_{s'} \sum_{r} p(s',r \ \vert \ s,a) \Big[ r + \gamma \mathbb{E}_\pi \left[ G_{t+1} \ \vert \ S_{t+1} = s' \right] \Big] \\
+        & = \sum_{a} \pi (a \vert s) \sum_{s', r} p(s', r \ \vert \ s,a) \Big[ r + \gamma v_\pi(s') \Big], \quad \forall s \in \mathcal{S}
+    \end{split}
+    \label{eq:ch2-bellmanequation}
+\end{equation}
+
+What we have in the end is known as the \textbf{Bellman equation} for $v_\pi$ and it states that the value of the start state must equal the (discounted) value of the expected next state, plus the reward expected along the way.
+
+\subsubsection{Bellman optimality equation}
+We can re-write the Bellman equation under the optimal policy, obtaining what is known as the \textbf{Bellman optimality equation}:
+\begin{equation}
+    \begin{split}
+        q_*(s,a) & = \mathbb{E} \left[ R_{t+1} + \gamma \max_{a'} q_* (S_{t+1}, a') \ \middle\vert \ S_t = s, A_t = a \right] \\
+        & = \sum_{s', r} p(s',r \ \vert \ s,a) \left[ r + \gamma \max_{a'} q_*(s',a') \right]
+    \end{split}
+    \label{eq:ch2-bellmanoptimalityequation}
+\end{equation}
+
+Intuitively, the Bellman optimality equation must equal the expected return for the best action from that state. 
+
+The Bellman optimality equation is actually a system of equations, one for each state, so if there are $n$ states, then there are $n$ equations in $n$ unknowns. If the dynamics $p$ of the environments are known, then in principle one can solve this system of equation for $v_*$. Once we have $v_*$ (or $q_*$), the actions that select the highest value for them in each state will then be the optimal actions. Another way of saying this is that any policy that is \textbf{greedy} with respect to the optimal evaluation function is an optimal policy. As a reminder, the term \textit{greedy} is used in computer science to describe any search or decision procedure that selects alternatives based only on local or immediate considerations, without considering the possibility that such a selection may prevent future access to even better alternatives. This is not an issue in the case of Markov Decision processes, though, as they indeed depend only on the current state: \textbf{a greedy policy is then optimal both in the short and in the long-term}.
+
+As we were hinting at earlier, it may not always be possible to solve the Bellman optimality equations, both due to the huge number of states (and equations) involved in non-trivial problems and because the state may not be fully observable, or we may not be able to know its dynamics.
+
+\subsection{Differences between Reinforcement Learning and other types of learning}
+As the last thing in this chapter, we try to make sure we have a clear idea of the differences between reinforcement learning and other types of learning and how it constitutes a third paradigm for learning.
+
+\subsubsection{Reinforcement learning vs Supervised learning}
+Supervised learning mainly deals with classification: being able to map a certain vectorial input to a set of labels. The supervised algorithms learn by being ``fed'' labelled examples that must be representative of runtime inputs to work: this clashes with the typical reinforcement learning application scenario of unknown situations.
+
+\subsubsection{Reinforcement learning vs Unsupervised learning}
+Unsupervised learning deals with information provided in unlabeled datasets and tries to find patterns, typically by means of clustering based on a distance function. Reinforcement learning, despite not relying on labels of correct behavior like unsupervised learning, has the goal of maximizing a reward signal instead of trying to find a hidden structure in a dataset.
