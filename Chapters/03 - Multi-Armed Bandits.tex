@@ -1,0 +1,69 @@
+\section{Multi-Armed Bandits}
+In this chapter we want to study the evaluative and explorative aspects of reinforcement learning in a simplified setting that does not involve learning to act in more than one situation.
+
+\subsubsection{The k-armed bandit problem}
+To do so, we introduce the \textbf{$k$-armed bandit problem} (a slot machine with $k$ levers), where we must choose between $k$ different options (the k arms of the bandit) and after each choice we receive a reward taken from a \textbf{stationary} probability distribution depending on the action we selected. Our objective is to maximize the expected total reward over a certain number of time steps.
+
+As a note, there is a different version of the $k$-armed bandit problem, known as \textbf{contextual bandits}, in which we do consider the state but assume that it does not depend on the previous actions. This problem is at the basis of ad-serving platforms.
+
+Let us now see things from a more formal point of view: in our $k$-armed bandit problem, each of the $k$ actions has an expected or mean reward given that that action is selected; let us call this the \textit{value} of that action. We denote the action selected on time step $t$ as $A_t$, and the corresponding reward as $R_t$. Our goal is then to maximize the following:
+\begin{gather*}
+    \mathbb{E} \left[ G_t \  \middle\vert \  S_t = s, A_t = a \right] \doteq \mathbb{E} \left[ R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... \  \middle\vert \  S_t = s, A_t = a \right] \\
+    = \mathbb{E} \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \  \middle\vert \  S_t = s, A_t = a \right]
+\end{gather*}
+
+Since one of the assumptions of this problem is that the state does not depend on the actions taken, we can think of it as a constant $\bar{s}$ and substitute it in the formula above, obtaining:
+
+\begin{gather*}
+    \mathbb{E} \left[ G_t \  \middle\vert \  S_t = \bar{s}, A_t = a \right] \doteq \mathbb{E} \left[ R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... \  \middle\vert \  S_t = \bar{s}, A_t = a \right] \\
+    = \mathbb{E} \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \  \middle\vert \  S_t = \bar{s}, A_t = a \right]
+\end{gather*}
+
+The value of an arbitrary action a denoted as $q_*(a)$ is the expected reward given that $a$ is selected. More formally:
+\begin{equation*}
+    q_*(a) \doteq \mathbb{E} \left[ R_t \  \middle\vert \  A_t = a \right]
+\end{equation*}
+
+(Note how the expected reward does not include the state, as it is always the same). If we disregard the trivial case in which we already know the value of each action, we need to play to be able to estimate the value of the various actions: we denote the estimated value of action $a$ at time step $t$ as $Q_t(a)$ and we want it to be as close as possible to $q_*(a)$.
+
+If we maintain the estimates of each action value, then at any time step there will be at least one action whose value is the greatest (we refer to this action as the \textbf{greedy action}). When we select one of these actions, we are \textbf{exploiting our current knowledge} of the value of the actions. If instead we choose one of the nongreedy actions, then we are \textbf{exploring}, because this enables us to improve our estimate of the nongreedy action’s value. Exploitation maximizes the expected reward on the step, but by exploring, we may obtain a greater total reward in the long run (this is particularly true if our estimates have high uncertainty). In any specific case, whether it is better to explore or exploit depends in a complex way on the precise values of the estimates, uncertainties, and the number of remaining steps.
+
+\subsection{Evaluating action-value methods}
+Now that we have understood the need for estimating the values of actions and for using the estimates to make action selection decisions (which we collectively call \textbf{action-value methods}), we must look at some methods to do so.
+
+In the case of the $k$-armed bandits problem, the value of an action is the mean reward when that action is selected, since we only have one state. A possible way to estimate this is by averaging the rewards we actually received:
+\begin{gather}
+    Q_t(a) \doteq \frac{\text{sum of rewards when an action } a \text{ is taken prior to time } t}{\text{number of times an action } a \text{ is taken prior to time } t}\nonumber\\
+    = \frac{\sum_{i=1}^{t-1} R_i \cdot \mathbbm{1}_{A_i = a}}{\sum_{i=1}^{t-1} \mathbbm{1}_{A_i = a}}
+    \label{eq:ch3-sampleaveragemethod}
+\end{gather}
+
+Where $\mathbbm{1}_{\text{predicate}}$ denotes the random variable that is 1 if predicate is true and 0 if it is not. If the denominator is zero, then we instead define $Q_t(a)$  as some default value, such as 0. As the denominator goes to infinity, by the law of large numbers, $Q_t(a)$ converges to $q_*(a)$. We call this the \textbf{sample-average method} for estimating action values because each estimate is an average of the sample of relevant rewards.
+
+When it comes to selecting actions, the simplest action selection rule is to select one of the actions with the highest estimated value, that is, one of the greedy actions. If there is more than one greedy action, then a selection is made among them in some arbitrary way, perhaps randomly. We can formalize this \textbf{greedy action selection method} as:
+\begin{equation}
+    A_t \doteq \argmax_a  Q_t(a)
+    \label{eq:ch3-greedyactionselectionmethod}
+\end{equation}
+Where $\argmax_a$ denotes the action $a$ for which the expression that follows is maximized (with ties broken arbitrarily). The greedy action selection always exploits the current knowledge to maximize the immediate reward, disregarding exploration. To include it, we can add a small probability $\epsilon$ where the next action is selected randomly from all the actions with equal probability. This is called the \textbf{$\boldsymbol{\epsilon}$-greedy selection rule} and it has the advantage that in the limit, as the number of steps increases, every action will be sampled an infinite number of times, ensuring that all the $Q_t(a)$ converge to their respective $q_*(a)$ (these, however, are just asymptotic guarantees and say little about the practical effectiveness of these methods).
+
+\subsection{Incremental implementation}
+We now move to the question of how the methods that we have seen before can be computed in a computationally efficient manner, with constant memory and constant per-time-step computation.
+
+To simplify the notation, we will concentrate on a single action $a$. Let $R_i(a)$ denote the reward received after the $i$-th selection of the action $a$, and let $Q_n$ denote the estimate of its action value after it has been selected $n-1$ times. We can now write:
+\begin{equation*}
+    Q_n(a) \doteq \frac{R_1(a) + R_2(a) + ... + R_{n-1}(a)}{n-1}
+\end{equation*}
+
+A trivial implementation of this would be to maintain a record of all the rewards and then perform this computation whenever the estimate value is needed. However, both memory and computation requirements would grow over time as more and more rewards are received. This can be avoided by considering the following steps:
+
+\begin{equation*}
+    \begin{split}
+        Q_{n+1} & = \frac{1}{n} \sum_{i=1}{n} R_i\\
+        & = \frac{1}{n} \Big( R_n + \sum_{i=1}{n-1} R_i \Big) \\
+        & = \frac{1}{n} \Big( R_n + (n-1) \frac{1}{n-1} \sum_{i=1}{n-1} R_i \Big) \\
+        & = \frac{1}{n} \Big( R_n + (n-1) Q_n \Big) \\
+        & = \frac{1}{n} \Big( R_n + n Q_n - Q_n \Big) \\
+        & = Q_n + \frac{1}{n} \Big[R_n - Q_n \Big]
+    \end{split}
+\end{equation*}

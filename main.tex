@@ -10,12 +10,25 @@
 \usepackage{graphicx}
 \usepackage{hyperref}           % links
 \usepackage{wrapfig}            % Wrap figures
+\usepackage{afterpage}          % for empty pages
+\usepackage{bbm}                % numbers with mathbb
+\usepackage{bm}                 % bold math symbols
 \usepackage[
     backend=biber,
     style=alphabetic,
     sorting=ynt
 ]{biblatex}
 
+% Custom commands
+\newcommand\addemptypage{       % empty page
+    \null
+    \thispagestyle{empty}
+    \addtocounter{page}{-1}
+    \newpage
+    }
+    
+% Custom operators
+\DeclareMathOperator*{\argmax}{argmax}
 
 % Bibliography
 \addbibresource{sources.bib}
@@ -36,10 +49,14 @@
 \begin{document}
 
 % Put the title on its own page
+\pagenumbering{gobble} % Do not print any page numbering on the title
 \maketitle
 \clearpage
+\addemptypage
 
 % Disclaimer and intro
+\pagenumbering{roman} % Roman numbering before the start of the actual content
+
 Material used for these notes includes:
 \begin{itemize}
     \item Prof. Musolesi's slides, available here: \url{https://www.mircomusolesi.org/courses/AAS20-21/AAS20-21-main/}
@@ -57,9 +74,16 @@ The latest version of these notes can be found in my GitHub repository here: \ur
 
 \clearpage
 
+% Table of contents
+\tableofcontents
+\clearpage
+\addemptypage
+
 % Content from the chapters
+\pagenumbering{arabic} % number the pages from now on
 \input{Chapters/01 - Intelligent Agents}
 \input{Chapters/02 - Introduction to Reinforcement Learning}
+\input{Chapters/03 - Multi-Armed Bandits}
 
 % Bibliography
 \clearpage
