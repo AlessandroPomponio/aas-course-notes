@@ -12,12 +12,12 @@ In the last chapter, Turing shows a handful of solutions to tackle the problem o
     \item Other experience, not to be described as education, to which it has been subjected.
 \end{itemize}
 
-Instead of producing a program to simulate an adult mind, he suggests producing one that simulates the one of a child and subject it to an appropriate ``education'' to obtain an adult brain. He is very aware that \textit{``We cannot expect to find a good child-machine at the first attempt. One must experiment with teaching one such machine and see how well it learns. One can then try another and see if it is better or worse. There is an obvious connection between this process and evolution} [...]\textit{''}. The teaching process will have to involve punishments and rewards: \textit{``The machine has to be so constructed that events which shortly preceded the occurrence of a punishment-signal are unlikely to be repeated, whereas a reward-signal increased the probability of
-repetition of the events which led up to it''}. Finally, he also foresees one of the problems that is still unsolved in the machine learning field: \textit{``An important feature of a learning machine is that its teacher will often be very largely ignorant of quite what is going on inside, although he may
+Instead of producing a program to simulate an adult mind, he suggests producing one that simulates the one of a child and subject it to an appropriate ``education'' to obtain an adult brain. He is very aware that \textit{``We cannot expect to find a good child-machine at the first attempt. One must experiment with teaching one such machine and see how well it learns. One can then try another and see if it is better or worse. There is an obvious connection between this process and evolution} [...]\textit{''}. The teaching process will also have to involve punishments and rewards: \textit{``The machine has to be so constructed that events which shortly preceded the occurrence of a punishment-signal are unlikely to be repeated, whereas a reward-signal increased the probability of
+repetition of the events which led up to it''}. Finally, he foresees one of the problems that is still unsolved in the machine learning field: \textit{``An important feature of a learning machine is that its teacher will often be very largely ignorant of quite what is going on inside, although he may
 still be able to some extent to predict his pupil’s behaviour''}.
 
 \subsection{Intelligent machines}
-After seeing a few examples of autonomous systems, like self-driving cars and agents that play videogames, it is clear that our goal is to be able to build machines that can learn from experience, trying things out on their own, without any human intervention. We first start by giving some definitions.
+After seeing a few examples of autonomous systems, like self-driving cars and agents that play videogames, we understand that our goal is to be able to build machines that can learn from experience, trying things out on their own, without any human intervention. We first start by giving some definitions.
 
 \subsubsection{Intelligent agents}
 We define an \textbf{intelligent agent} as an entity that perceives its environment and takes actions that maximize the probability of achieving its goals. It is important to note that the agent does not know what set of actions will allow it to reach the goal, it just ``moves'' towards actions that maximize the probability of it happening. Agents may also be physically situated (we call them \textbf{robots}) or not (we refer to them as \textbf{software agents} or \textbf{bots}).
@@ -66,14 +66,14 @@ The environment in which our agent is situated may be of different types:
 \end{itemize}
 
 \subsection{A categorization of intelligent agents}
-There are essentially four basic kinds of agent programs:
+There are essentially four basic kinds of agents:
 \begin{itemize}
     \item \textbf{Simple reflex agents}.
     \item \textbf{Model-based reflex agents}.
     \item \textbf{Goal-based agents}.
     \item \textbf{Utility-based agents}.
 \end{itemize}
-The behavior of these agents can be hard-wired or it can be acquired, improved and optimized through learning.
+The behavior of these agents can be hard-wired, or it can be acquired, improved and optimized through learning.
 
 \subsubsection{Simple reflex agents}
 Simple reflex agents select actions on the basis of the current perceptions, ignoring the perception history. They are the most basic form of agents and are based on condition-action rules (also called \textbf{stimulus-response} rules, productions, or if-then rules). (See figure \ref{fig:ch1-simplereflexagent})
