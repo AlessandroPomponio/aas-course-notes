@@ -136,10 +136,12 @@ The Bellman optimality equation is actually a system of equations, one for each 
 As we were hinting at earlier, it may not always be possible to solve the Bellman optimality equations, both due to the huge number of states (and equations) involved in non-trivial problems and because the state may not be fully observable, or we may not be able to know its dynamics.
 
 \subsection{Differences between Reinforcement Learning and other types of learning}
-As the last thing in this chapter, we try to make sure we have a clear idea of the differences between reinforcement learning and other types of learning and how it constitutes a third paradigm for learning.
+As the last thing in this chapter, we try to make sure we have a clear idea of the differences between reinforcement learning and other types of learning.
 
 \subsubsection{Reinforcement learning vs Supervised learning}
 Supervised learning mainly deals with classification: being able to map a certain vectorial input to a set of labels. The supervised algorithms learn by being ``fed'' labelled examples that must be representative of runtime inputs to work: this clashes with the typical reinforcement learning application scenario of unknown situations.
 
 \subsubsection{Reinforcement learning vs Unsupervised learning}
 Unsupervised learning deals with information provided in unlabeled datasets and tries to find patterns, typically by means of clustering based on a distance function. Reinforcement learning, despite not relying on labels of correct behavior like unsupervised learning, has the goal of maximizing a reward signal instead of trying to find a hidden structure in a dataset.
+
+In general, the most important feature distinguishing reinforcement learning from other types of learning is that it uses training information that \textbf{evaluates} the actions taken rather than \textbf{instructs} by giving correct actions.
