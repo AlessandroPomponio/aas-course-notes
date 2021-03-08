@@ -59,9 +59,9 @@ A trivial implementation of this would be to maintain a record of all the reward
 
 \begin{equation*}
     \begin{split}
-        Q_{n+1} & = \frac{1}{n} \sum_{i=1}{n} R_i\\
-        & = \frac{1}{n} \Big( R_n + \sum_{i=1}{n-1} R_i \Big) \\
-        & = \frac{1}{n} \Big( R_n + (n-1) \frac{1}{n-1} \sum_{i=1}{n-1} R_i \Big) \\
+        Q_{n+1} & = \frac{1}{n} \sum_{i=1}^{n} R_i\\
+        & = \frac{1}{n} \Big( R_n + \sum_{i=1}^{n-1} R_i \Big) \\
+        & = \frac{1}{n} \Big( R_n + (n-1) \frac{1}{n-1} \sum_{i=1}^{n-1} R_i \Big) \\
         & = \frac{1}{n} \Big( R_n + (n-1) Q_n \Big) \\
         & = \frac{1}{n} \Big( R_n + n Q_n - Q_n \Big) \\
         & = Q_n + \frac{1}{n} \Big[R_n - Q_n \Big]
