@@ -67,3 +67,65 @@ A trivial implementation of this would be to maintain a record of all the reward
         & = Q_n + \frac{1}{n} \Big[R_n - Q_n \Big]
     \end{split}
 \end{equation*}
+
+This type of update rule is quite common in reinforcement learning and follows this general formula:
+\begin{equation*}
+    \text{NewEstimate} \leftarrow \text{OldEstimate} + \text{StepSize}(\text{Target} - \text{OldEstimate})
+\end{equation*}
+
+The expression $(\text{Target} - \text{OldEstimate})$ is usually defined as the \textbf{error} in the estimate. It is reduced by taking a step towards the $\text{Target}$, which is presumed to indicate a desirable direction in which to move (though it may be noisy).
+
+\subsection{Tracking a nonstationary problem}
+The averaging method we just discussed is appropriate for stationary bandit problems, where the distribution of the rewards does not change over time. Many problems, however, fall in the nonstationary category and in those cases, it makes sense to give more weight to recent rewards, rather than long-gone ones. One of the most popular ways of dealing with these problems is using a \textbf{constant step-size parameter} $\boldsymbol{\alpha}$ (like $\frac{1}{n}$ in the formula above) in the range $]0,1]$ as such:
+\begin{equation}
+    Q_{n+1} \doteq Q_n + \alpha \left[R_n - Q_n \right]
+    \label{eq:ch3-nonstationaryincrementalupdaterule}
+\end{equation}
+
+\textbf{This results in $\boldsymbol{Q_{n+1}}$ being a weighted average of past rewards and the initial estimate $Q_1$:}
+\begin{equation}
+    \begin{split}
+        Q_{n+1} &= Q_n + \alpha \Big[ R_n - Q_n \Big] \\
+        &= \alpha R_n + (1 - \alpha) Q_n \\
+        &= \alpha R_n + (1 - \alpha) [\alpha R_{n-1} + (1 - \alpha) Q_{n-1}] \\
+        &= \alpha R_n + (1 - \alpha) \alpha R_{n-1} + (1 - \alpha)^2 Q_{n-1} \\
+        &= \alpha R_n + (1 - \alpha) \alpha R_{n-1} + (1 - \alpha)^2 \alpha R_{n-2} + ... + (1 - \alpha)^{n-1} \alpha R_1 + (1 - \alpha)^n Q_1 \\
+        &= (1 - \alpha)^n Q_1 + \sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} R_i
+    \end{split}
+    \label{eq:ch3-exponentialrecencyweightedaverage}
+\end{equation}
+
+This is called a weighted average since the sum of the weights $(1 - \alpha)^n + \sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} = 1$, as we can see here:
+
+\begin{equation*}
+    \begin{split}
+        & (1 - \alpha)^n + \sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} \\
+        &= (1 - \alpha)^n + \alpha (1 - \alpha)^n \sum_{i=1}^{n} (1 - \alpha)^{-i} \\
+        &= (1 - \alpha)^n + \alpha (1 - \alpha)^n \Big(-1 + \sum_{i=0}^{n} (1 - \alpha)^{-i} \Big) \\
+        &= (1 - \alpha)^{n+1} + \alpha (1 - \alpha)^n \sum_{i=0}^{n} (1 - \alpha)^{-i} \\
+        &= (1 - \alpha)^{n+1} + \alpha (1 - \alpha)^n \frac{\alpha + (1 - \alpha)^{-n} -1}{\alpha} \\
+        &= (1 - \alpha)^{n+1} + (1 - \alpha)^n \Big( \alpha + (1 - \alpha)^{-n} -1 \Big) \\
+        &= (1 - \alpha)^{n+1} + \alpha (1 - \alpha)^n + 1 - (1 - \alpha)^n \\
+        &= (1 - \alpha)^{n+1} + (1 - \alpha)^n (\alpha - 1) + 1 \\
+        &= (1 - \alpha)^{n+1} - (1 - \alpha)^{n+1} + 1 = 1
+    \end{split}
+\end{equation*}
+
+The quantity $1 - \alpha$ is less than $1$, and thus the weight given to $R_i$ decreases as the number of rewards increases. In fact, the weight decreases exponentially according to the exponent on $1 - \alpha$; accordingly, this is sometimes called an \textbf{exponential recency-weighted average}.
+
+\subsection{Optimistic initial values}
+All the methods that we have discussed until now depend to some extent on the initial action-value estimates (they are \textbf{biased} by their initial estimates). For the sample-average methods, the bias disappears once all actions have been selected at least once, but for methods with a constant $\alpha$ the bias is permanent (although decreasing over time as given by the equation \eqref{eq:ch3-exponentialrecencyweightedaverage}). In practice, this kind of bias is usually not a problem and can sometimes be helpful, especially to supply some prior knowledge or to encourage exploration. The downside is that the initial estimates become, in effect, a set of parameters that must be picked by the user.
+
+Choosing a wildly optimistic initial value encourages action-value methods to explore: whichever actions are initially selected, the reward is less than the starting estimates; the learner will then switch to other actions, being ``disappointed'' with the rewards it is receiving. The result is that all actions are tried several times before the value estimates converge, making the system do a fair amount of exploration even with a fully greedy action selection strategy. Initially, the optimistic method performs worse because it explores more, but eventually it performs better as its exploration decreases with time. We call this technique for encouraging exploration \textbf{optimistic initial values}. It is a simple trick that can be quite effective on stationary problems, while it is not well suited to nonstationary problems, as its drive for exploration is inherently temporary (any method that focuses on the initial conditions is unlikely to help with the general nonstationary case).
+
+\subsection{Upper-Confidence-Bound Action Selection}
+Exploration is needed because there is always uncertainty about the accuracy of the action-value estimates. $\epsilon$-greedy action selection forces non-greedy (exploratory) actions to be tried, but indiscriminately, with no preference for those that are nearly greedy or particularly uncertain. It would be better to select among the non-greedy actions according to their potential for actually being optimal, taking into account both how close their estimates are to being maximal and the uncertainties in those estimates. One effective way of doing this is to select actions according to the following formula:
+\begin{equation}
+    A_t \doteq \argmax_a \Bigg[ Q_t (a) + c + \sqrt{\frac{\ln{t}}{N_t (a)}} \Bigg]
+    \label{eq:ch3-upperconfidenceboundactionselection}
+\end{equation}
+
+Where $t$ is the time at which action $A_t$ is taken, $N_t (a)$ denotes the number of times that action a has been selected prior to time $t$ and the number $c > 0$ controls the degree of exploration. The idea of this \textbf{upper confidence bound (UCB)} action selection is that the square-root term is a measure of the uncertainty or variance of the estimate of the actual value of action $a$. The quantity being maxed over is thus a sort of upper bound on the possible true value of action $a$, with $c$ determining the confidence level. Each time $a$ is selected, the uncertainty is presumably reduced: $N_t (a)$ increments, and, as it appears in the denominator, the uncertainty term decreases. On the other hand, each time an action other than $a$ is selected, $t$ increases but $N_t (a)$ does not; because $t$ appears in the numerator, the uncertainty estimate increases. The use of the natural logarithm means that the increases get smaller over time, but are unbounded; all actions will eventually be selected, but actions with lower value estimates, or that have already been selected frequently, will be selected with decreasing frequency over time.
+
+\subsection{Contextual bandits}
+Multi-armed bandits are used when the selection of the action does not depend on the state, but for many application (e.g., ads on a webpage), the state is very important. When the action selection depends on the state, but not on its previous history, we speak of \textbf{contextual bandits}. They are examples of \textbf{associative search tasks}, as they involve both trial-and-error learning to \textbf{search} for the best actions, and \textbf{association} of these actions with the situation in which they are best (e.g., if we are on a website about sportscars, we will be served ads about cars and not about flowers). Contextual bandits are still not a ``full'' reinforcement learning problem, as actions do not affect the future state, but only the immediate reward.
