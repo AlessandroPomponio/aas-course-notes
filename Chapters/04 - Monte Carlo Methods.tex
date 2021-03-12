@@ -1,0 +1,61 @@
+\section{Monte Carlo Methods}
+Monte Carlo methods are ways of solving the reinforcement learning problem based on averaging sample returns. To ensure that well-defined returns are available, we will focus on episodic tasks. That is, we assume experience is divided into episodes, and that all episodes eventually terminate no matter what actions are selected. Only on the completion of an episode are value estimates and policies changed. Monte Carlo methods can thus be incremental in an episode-by-episode sense, but not in a step-by-step (online) sense.
+
+Monte Carlo methods sample and average \textbf{returns} for each state-action pair much like the bandit methods we explored earlier sample and average \textbf{rewards} for each action. The main difference is that now there are multiple states, each acting like a different (but interrelated) bandit problem. That is, \textbf{the return after taking an action in one state depends on the actions taken in later states in the same episode} (it is the \textbf{average expected cumulative reward}). 
+
+From this point on, we will assume that we do not have full knowledge of the underlying Markov Decision Process. We are then entering the \textbf{full reinforcement learning problem}, in which the underlying dynamics and characteristics of the system are unknown (e.g., robot exploration) or because the system is too complex (e.g., games). In these types of problems, we will have to \textbf{learn the value functions from sample returns}.
+
+We will consider three problems:
+\begin{enumerate}
+    \item The \textbf{prediction problem}, where we want to estimate $v_\pi$ and $q_\pi$ for a fixed policy $\pi$. We are given a fixed policy (that is, we know how we play) and we try to estimate the expected cumulative reward.
+    \item The \textbf{policy improvement problem}, where we still try to estimate $v_\pi$ and $q_\pi$, but this time we also try to improve the policy $\pi$. We try to estimate the value of each state and we use this information to play better.
+    \item The \textbf{control problem}, where we try to estimate an optimal policy $\pi_*$ (e.g., we try to find the best way to play a game; the best way to build a datacenter to minimize energy consumption; …).
+\end{enumerate}
+
+\subsection{Monte Carlo Prediction}
+We begin by considering Monte Carlo methods for learning the state-value function for a given policy. Before doing so, we must have clear in our minds that \textbf{the value of a state is the expected return (expected cumulative future discounted reward) starting from that state}. An obvious way to estimate it from experience, then, is simply to average the returns observed after visits to that state. As more returns are observed, the average should converge to the expected value. This idea underlies all Monte Carlo methods.
+
+More formally: we want to estimate $v_\pi (s)$, the value of a state $s$ under policy $\pi$, given a set of episodes obtained by following $\pi$ and passing through $s$. Each occurrence of state $s$ in an episode is called a \textbf{visit} to $s$. The same state may be visited multiple times in a certain episode: let us call the first time this happens the \textbf{first visit to} $\boldsymbol{s}$. The \textbf{first-visit Monte Carlo method} estimates $v_\pi (s)$ as the average of the returns following the \textit{``first visits''} to $s$, whereas the \textbf{every-visit Monte Carlo method} averages the returns following \textit{all visits} to $s$.
+
+\subsubsection{First-visit Monte Carlo Prediction}
+The algorithm for the \textit{first-visit Monte Carlo Prediction} is shown here:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{a policy $\pi$ to be evaluated}
+\Initialize{
+    \\
+    \Indp % add indent
+    $V(s) \in \mathbb{R}$, arbitrarily, $\forall s \in \mathcal{S}$ \\
+    $Returns(s) \leftarrow $ an empty list, $\forall s \in \mathcal{S}$ \\
+    \Indm % remove indent
+}
+
+ \Loop{forever (for each episode)}{
+    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
+    $G \leftarrow 0$ \;
+    \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
+        $G \leftarrow \gamma G + R_{t+1}$ \;
+        \Unless{$S_t$ appears in $S_0, S_1, ..., S_{t-1}$}{
+            Append $G$ to $Returns(s)$ \;
+            $V(S_t) \leftarrow average(Returns(S_t))$ \;
+        }
+    }
+    
+ }
+ \caption{First-visit Monte Carlo Prediction}
+\end{algorithm}
+
+This means generating an episode where we play following policy $\pi$ (the set of probabilities associated to each action) and analyzing the ``trajectory'' that we followed during the game in a backwards manner. During this phase we will calculate the values for all the states that we traversed and the average cumulative reward we can expect from them.
+
+\subsubsection{Every-visit (multi-visit) Monte Carlo Prediction}
+If we remove from the \textit{first-visit Monte Carlo Prediction} algorithm the check on whether a state $S_t$ has already occurred, we obtain the \textbf{every-visit Monte Carlo Prediction}, which also converges to $v_\pi (s)$ as the number of visits to a certain state $s$ goes to infinity.
+
+\subsection{Monte Carlo Estimation of Action Values}
+The estimation of a state value makes sense when we have a model of the system: with it, in fact, state values alone are sufficient to determine a policy; one simply looks ahead one step and chooses whichever action leads to the best combination of reward and next state. Without a model, however, it is necessary to estimate the value of each action in order for the value to be useful in suggesting a policy. 
+
+The \textbf{policy evaluation problem} for action values is to estimate $q_\pi (s,a)$, the expected return when starting in state $s$, taking action $a$ and then following policy $\pi$. The methods for the Monte Carlo estimation of action values are essentially the same as those presented for state values, except that now we talk about \textbf{visits to the state-action pair} rather than to a state. A state-action pair $s,a$ is said to be visited in an episode if ever the state $s$ is visited and the action $a$ is taken in it. The first-visit Monte Carlo method averages the returns following the first time in each episode that the state was visited and the action was selected.
+
+The only complication is that many state-action pairs may never be visited: if $\pi$ is a deterministic policy (to a certain state corresponds one and only one action), in fact, we would observe returns only for one of the actions of each state. With no returns to average, the Monte Carlo estimates of the other actions would subsequently not improve with experience. In order to compare alternatives, we then need to estimate the value of all the actions from each state, not only the one that is favored by our policy. This is the general problem of \textbf{maintaining exploration}.
+
+For policy evaluation to work for action values, we must assure \textbf{continual exploration}. One way to do this is by specifying that the episodes start in a state-action pair, and that every pair has a nonzero probability of being selected as the start. This guarantees that all state-action pairs will be visited an infinite number of times in the limit of an infinite number of episodes; we call this the assumption of \textbf{exploring starts}. This assumption is sometimes useful, but it cannot be relied upon in general (we may need to enumerate all the states, or they may not be valid): the most common alternative approach is to assure that all state-action pairs are encountered. This means \textbf{not following the current policy} (for example by using a stochastic policy). In other words, the exploration is not performed \textbf{on-policy}, but \textbf{off-policy} (various methods are possible, like \textit{Off-policy Predictions via Importance Sampling}).

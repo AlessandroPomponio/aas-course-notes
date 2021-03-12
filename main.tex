@@ -5,19 +5,25 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{parskip}            % Paragraph formatting
+\usepackage{parskip}                    % Paragraph formatting
 \usepackage{verbatim}
 \usepackage{graphicx}
-\usepackage{hyperref}           % links
-\usepackage{wrapfig}            % Wrap figures
-\usepackage{afterpage}          % for empty pages
-\usepackage{bbm}                % numbers with mathbb
-\usepackage{bm}                 % bold math symbols
+\usepackage{hyperref}                   % links
+\usepackage{wrapfig}                    % Wrap figures
+\usepackage{afterpage}                  % for empty pages
+\usepackage{bbm}                        % numbers with mathbb
+\usepackage{bm}                         % bold math symbols
 \usepackage[
     backend=biber,
     style=alphabetic,
     sorting=ynt
 ]{biblatex}
+
+% Algorithms
+\usepackage[ruled,vlined]{algorithm2e}
+\SetKwInput{Initialize}{Initialize} % Define the Initialize keyword
+\SetKwFor{Loop}{Loop}{:}{} % Define the Loop block
+\SetKwIF{Unless}{ElseUnless}{Else}{Unless}{:}{Else unless}{Else}{} % Define the Unless statement
 
 % Custom commands
 \newcommand\addemptypage{       % empty page
@@ -84,6 +90,7 @@ The latest version of these notes can be found in my GitHub repository here: \ur
 \input{Chapters/01 - Intelligent Agents}
 \input{Chapters/02 - Introduction to Reinforcement Learning}
 \input{Chapters/03 - Multi-Armed Bandits}
+\input{Chapters/04 - Monte Carlo Methods}
 
 % Bibliography
 \clearpage
