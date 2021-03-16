@@ -59,3 +59,97 @@ The \textbf{policy evaluation problem} for action values is to estimate $q_\pi (
 The only complication is that many state-action pairs may never be visited: if $\pi$ is a deterministic policy (to a certain state corresponds one and only one action), in fact, we would observe returns only for one of the actions of each state. With no returns to average, the Monte Carlo estimates of the other actions would subsequently not improve with experience. In order to compare alternatives, we then need to estimate the value of all the actions from each state, not only the one that is favored by our policy. This is the general problem of \textbf{maintaining exploration}.
 
 For policy evaluation to work for action values, we must assure \textbf{continual exploration}. One way to do this is by specifying that the episodes start in a state-action pair, and that every pair has a nonzero probability of being selected as the start. This guarantees that all state-action pairs will be visited an infinite number of times in the limit of an infinite number of episodes; we call this the assumption of \textbf{exploring starts}. This assumption is sometimes useful, but it cannot be relied upon in general (we may need to enumerate all the states, or they may not be valid): the most common alternative approach is to assure that all state-action pairs are encountered. This means \textbf{not following the current policy} (for example by using a stochastic policy). In other words, the exploration is not performed \textbf{on-policy}, but \textbf{off-policy} (various methods are possible, like \textit{Off-policy Predictions via Importance Sampling}).
+
+\subsection{Monte Carlo Policy Improvement and Monte Carlo Control}
+So far, we have assumed that the policy $\pi$ was fixed, like in the case of a statically defined set of probabilities for each action (the \textit{prediction problem}). However, by using methods typically known as \textbf{Monte Carlo Control}, we can improve the policy and reach the optimal one. In this section we will focus on \textbf{on-policy methods}, meaning \textbf{methods that attempt to evaluate or improve the policy that is used to make decisions}.
+
+The overall idea is to proceed according to the \textbf{Generalized Policy Iteration (GPI)}, in which we maintain both an approximate policy and an approximate value function. The value function is repeatedly altered to more closely approximate the value function for the current policy, and the policy is repeatedly improved with respect to the current value function. As we can imagine, these two changes work against each other to some extent, as each creates a ``moving target'' for the other, but together they cause both policy and value function to approach optimality.
+
+With this method, we perform alternating complete steps of policy evaluation and policy improvement, beginning with an arbitrary policy $\pi_0$ and ending with the optimal policy and action-value function as such:
+\begin{equation}
+    \pi_0 \overset{E}{\rightarrow} q_{\pi_0} \overset{I}{\rightarrow} \pi_1 \overset{E}{\rightarrow} q_{\pi_1} \overset{I}{\rightarrow} \pi_2 \overset{E}{\rightarrow} ... \overset{I}{\rightarrow} \pi_* \overset{E}{\rightarrow} q_*
+    \label{eq:ch3-generalizedpolicyiteration}
+\end{equation}
+
+Where $\overset{E}{\rightarrow}$ denotes a complete policy evaluation and $\overset{I}{\rightarrow}$ denotes a complete policy improvement. \textit{Policy evaluation} is performed as we mentioned in previous sections: many episodes are experienced, with the approximate action-value function approaching the true function asymptotically. \textit{Policy improvement} is done by making the policy greedy with respect to the current value function. Note how, since we have an action-value function, we do not need any model to construct the greedy policy: for any action-value function $q$, the corresponding greedy policy is the one that for each $s \in \mathcal{S}$, deterministically chooses an action with maximal action-value as such:
+\begin{equation*}
+    \pi(s) \doteq \argmax_a q(s,a)
+\end{equation*}
+
+Policy improvement can then be done by constructing each $\pi_{k+1}$ as the greedy policy with respect to $q_{\pi_k}$. The \textbf{policy improvement theorem} assures us that each $\pi_{k+1}$ is uniformly better than $\pi_k$ or just as good (in which case they are both optimal policies). This confirms that \textbf{the overall process converges to the optimal policy and optimal value function}.
+
+\subsubsection{Monte Carlo Control algorithm with Exploring Starts}
+Since we need to guarantee that all actions are selected ``infinitely often'', in some cases we can do so by means of \textbf{exploring starts}. A possible implementation of the \textbf{Monte Carlo Control algorithm with Exploring Starts} is shown in the box below:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\Initialize{
+    \\
+    \Indp % add indent
+    $\pi(s) \in \mathcal{A}(s)$ (arbitrarily), $\forall s \in \mathcal{S}$ \\
+    $Q(s,a) \in \mathbb{R}$ (arbitrarily), $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
+    $Returns(s,a) \leftarrow $ an empty list, $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
+    \Indm % remove indent
+}
+
+ \Loop{forever (for each episode)}{
+    Choose a starting state and action $S_0 \in \mathcal{S}, A_0 \in \mathcal{A}(S_0)$ randomly, such that all pairs have probability $> 0$ \;
+    Generate an episode starting with $S_0,A_0$ and following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
+    $G \leftarrow 0$ \;
+    \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
+        $G \leftarrow \gamma G + R_{t+1}$ \;
+        \Unless{the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, ..., S_{t-1}, A_{t-1}$}{
+            Append $G$ to $Returns(S_t, A_t)$ \;
+            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$ \;
+            $\pi(S_t) \leftarrow \argmax_a Q(S_t,a)$
+        }
+    }
+    
+ }
+ \caption{Monte Carlo Control algorithm with Exploring Starts}
+\end{algorithm}
+
+With this algorithm, all the returns for each state-action pair are accumulated and averaged, irrespective of what policy was in force when they were observed. It is easy to see that it cannot converge to any suboptimal policy: if it did, then the value function would eventually converge to the value function for that policy, and that in turn would cause the policy to change. \textbf{Stability is achieved only when both the policy and the value function are optimal}.
+
+\subsubsection{Monte Carlo Control without Exploring Starts}
+As we mentioned earlier on, the assumption of exploring starts is often unlikely to be valid; a possible alternative is to use \textbf{soft policies}, meaning that each action in each state has a nonzero probability of being chosen ($\pi(a \vert s) > 0, \forall s\in\mathcal{S},a\in\mathcal{A}(s)$), but gradually shifts closer and closer to a deterministic, optimal policy. The $\epsilon$-greedy policy we have already seen previously is an example of $\epsilon$-soft policy, in which all non-greedy actions have a (small) probability $\frac{\epsilon}{\left\vert \mathcal{A}(s) \right\vert}$ of being selected.
+
+Contrarily to what we did under the assumption of exploring starts, we cannot simply improve the policy by making it greedy with respect to the current value function, as it would prevent any exploration of the nongreedy actions. Fortunately, the Generalized Policy Iteration method does not require that the policy be taken all the way to a greedy policy, but only that it be moved \textit{towards} a greedy policy. That any $\epsilon$-greedy policy with respect to $q_\pi$ is an improvement over any $\epsilon$-soft policy $\pi$ is once again assured by the policy improvement theorem.
+
+The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\epsilon}$-soft policies) algorithm} is presented in the box below:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\Parameters{small $\epsilon > 0$}
+\Initialize{
+    \\
+    \Indp % add indent
+    $\pi \leftarrow$ an arbitrary $\epsilon$-soft policy \\
+    $Q(s,a) \in \mathbb{R}$ (arbitrarily), $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
+    $Returns(s,a) \leftarrow $ an empty list, $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
+    \Indm % remove indent
+}
+
+ \Loop{forever (for each episode)}{
+    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
+    $G \leftarrow 0$ \;
+    \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
+        $G \leftarrow \gamma G + R_{t+1}$ \;
+        \Unless{the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, ..., S_{t-1}, A_{t-1}$}{
+            Append $G$ to $Returns(S_t, A_t)$ \;
+            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$ \;
+            $A^* \leftarrow \argmax_a Q(S_t,a) \quad$ (with ties broken arbitrarily) \;
+            $\forall a \in \mathcal{A}(S_t)$:
+            \begin{equation*}
+                \pi(a \vert S_t) \leftarrow
+                \begin{cases}
+                            1 - \epsilon + \frac{\epsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a = A^* \\
+                            \frac{\epsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a \neq A^*
+                \end{cases}
+            \end{equation*}
+        }
+    }
+    
+ }
+ \caption{Monte Carlo Control algorithm with Exploring Starts}
+\end{algorithm}
