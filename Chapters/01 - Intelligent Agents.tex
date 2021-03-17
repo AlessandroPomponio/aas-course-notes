@@ -32,6 +32,7 @@ We define an \textbf{autonomous agent} as an entity that only relies on its perc
 
 \subsubsection{Designing agents}
 When designing agents, we need to take into consideration the following dimensions:
+
 \begin{itemize}
     \item Performance: how ``good'' is the agent.
     \item Environment: what is ``around'' the agent.
@@ -56,6 +57,7 @@ A schema of how these dimensions are linked can be found in figure \ref{fig:ch1-
 
 \subsection{Characteristics of the environments}
 The environment in which our agent is situated may be of different types:
+
 \begin{itemize}
     \item \textbf{Fully observable vs partially observable}: we may or may not be able to see the entire environment (e.g., there may be occlusions limiting our sight).
     \item \textbf{Deterministic vs stochastic}: the environment may be predictable (e.g., governed by the laws of Newtonian physics) or not (e.g., the environment may be subject to changes performed by another agent).
@@ -67,12 +69,14 @@ The environment in which our agent is situated may be of different types:
 
 \subsection{A categorization of intelligent agents}
 There are essentially four basic kinds of agents:
+
 \begin{itemize}
     \item \textbf{Simple reflex agents}.
     \item \textbf{Model-based reflex agents}.
     \item \textbf{Goal-based agents}.
     \item \textbf{Utility-based agents}.
 \end{itemize}
+
 The behavior of these agents can be hard-wired, or it can be acquired, improved and optimized through learning.
 
 \subsubsection{Simple reflex agents}
@@ -87,10 +91,12 @@ Simple reflex agents select actions on the basis of the current perceptions, ign
 
 \subsubsection{Model-based reflex agents}
 Model-based agents keep an internal state and depend on two types of knowledge:
+
 \begin{itemize}
     \item How the world evolves independently from the agent (e.g., the trajectory that a bullet/a stone follows when shot/thrown).
     \item How the actions of the agent affect the world (e.g., if I turn the wheel to the right, the car moves to the right).
 \end{itemize}
+
 The internal state is essentially used to keep track of what it is not possible to see/perceive at the current time. It depends on the perception history and, for this reason, it reflects at least some of the unobserved aspects of the current state. (See figure \ref{fig:ch1-modelbasedreflexagent})
 
 \begin{figure}[hbt]

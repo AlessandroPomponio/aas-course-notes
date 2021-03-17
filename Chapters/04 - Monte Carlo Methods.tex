@@ -32,13 +32,13 @@ The algorithm for the \textit{first-visit Monte Carlo Prediction} is shown here:
 }
 
  \Loop{forever (for each episode)}{
-    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
-    $G \leftarrow 0$ \;
+    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$\\
+    $G \leftarrow 0$\;
     \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
-        $G \leftarrow \gamma G + R_{t+1}$ \;
+        $G \leftarrow \gamma G + R_{t+1}$\;
         \Unless{$S_t$ appears in $S_0, S_1, ..., S_{t-1}$}{
-            Append $G$ to $Returns(s)$ \;
-            $V(S_t) \leftarrow average(Returns(S_t))$ \;
+            Append $G$ to $Returns(s)$\;
+            $V(S_t) \leftarrow average(Returns(S_t))$\;
         }
     }
     
@@ -66,12 +66,14 @@ So far, we have assumed that the policy $\pi$ was fixed, like in the case of a s
 The overall idea is to proceed according to the \textbf{Generalized Policy Iteration (GPI)}, in which we maintain both an approximate policy and an approximate value function. The value function is repeatedly altered to more closely approximate the value function for the current policy, and the policy is repeatedly improved with respect to the current value function. As we can imagine, these two changes work against each other to some extent, as each creates a ``moving target'' for the other, but together they cause both policy and value function to approach optimality.
 
 With this method, we perform alternating complete steps of policy evaluation and policy improvement, beginning with an arbitrary policy $\pi_0$ and ending with the optimal policy and action-value function as such:
+
 \begin{equation}
     \pi_0 \overset{E}{\rightarrow} q_{\pi_0} \overset{I}{\rightarrow} \pi_1 \overset{E}{\rightarrow} q_{\pi_1} \overset{I}{\rightarrow} \pi_2 \overset{E}{\rightarrow} ... \overset{I}{\rightarrow} \pi_* \overset{E}{\rightarrow} q_*
     \label{eq:ch3-generalizedpolicyiteration}
 \end{equation}
 
 Where $\overset{E}{\rightarrow}$ denotes a complete policy evaluation and $\overset{I}{\rightarrow}$ denotes a complete policy improvement. \textit{Policy evaluation} is performed as we mentioned in previous sections: many episodes are experienced, with the approximate action-value function approaching the true function asymptotically. \textit{Policy improvement} is done by making the policy greedy with respect to the current value function. Note how, since we have an action-value function, we do not need any model to construct the greedy policy: for any action-value function $q$, the corresponding greedy policy is the one that for each $s \in \mathcal{S}$, deterministically chooses an action with maximal action-value as such:
+
 \begin{equation*}
     \pi(s) \doteq \argmax_a q(s,a)
 \end{equation*}
@@ -93,15 +95,15 @@ Since we need to guarantee that all actions are selected ``infinitely often'', i
 }
 
  \Loop{forever (for each episode)}{
-    Choose a starting state and action $S_0 \in \mathcal{S}, A_0 \in \mathcal{A}(S_0)$ randomly, such that all pairs have probability $> 0$ \;
-    Generate an episode starting with $S_0,A_0$ and following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
-    $G \leftarrow 0$ \;
+    Choose a starting state and action $S_0 \in \mathcal{S}, A_0 \in \mathcal{A}(S_0)$ randomly, such that all pairs have probability $> 0$\;
+    Generate an episode starting with $S_0,A_0$ and following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$\;
+    $G \leftarrow 0$\;
     \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
-        $G \leftarrow \gamma G + R_{t+1}$ \;
+        $G \leftarrow \gamma G + R_{t+1}$\;
         \Unless{the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, ..., S_{t-1}, A_{t-1}$}{
-            Append $G$ to $Returns(S_t, A_t)$ \;
-            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$ \;
-            $\pi(S_t) \leftarrow \argmax_a Q(S_t,a)$
+            Append $G$ to $Returns(S_t, A_t)$\;
+            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$\;
+            $\pi(S_t) \leftarrow \argmax_a Q(S_t,a)$\;
         }
     }
     
@@ -131,14 +133,14 @@ The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\epsilon
 }
 
  \Loop{forever (for each episode)}{
-    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ \;
-    $G \leftarrow 0$ \;
+    Generate an episode following $\pi$: $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$\;
+    $G \leftarrow 0$\;
     \Loop{for each step of the episode, $t = T-1, T-2, ..., 0$}{
-        $G \leftarrow \gamma G + R_{t+1}$ \;
+        $G \leftarrow \gamma G + R_{t+1}$\;
         \Unless{the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, ..., S_{t-1}, A_{t-1}$}{
-            Append $G$ to $Returns(S_t, A_t)$ \;
-            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$ \;
-            $A^* \leftarrow \argmax_a Q(S_t,a) \quad$ (with ties broken arbitrarily) \;
+            Append $G$ to $Returns(S_t, A_t)$\;
+            $Q(S_t,A_t) \leftarrow average(Returns(S_t,A_t))$\;
+            $A^* \leftarrow \argmax_a Q(S_t,a) \quad$ (with ties broken arbitrarily)\;
             $\forall a \in \mathcal{A}(S_t)$:
             \begin{equation*}
                 \pi(a \vert S_t) \leftarrow
