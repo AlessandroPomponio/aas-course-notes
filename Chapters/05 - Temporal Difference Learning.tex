@@ -1,4 +1,4 @@
-\section{Temporal Difference Learning}
+\chapter{Temporal Difference Learning}
 Monte Carlo methods introduced us to ways of learning from raw experience without a model of the environment’s dynamics, iteratively generating episodes and analyzing their returns once they have been played out. Temporal Difference methods behave similarly, but overcome the limit of having to wait for the whole episode to end, enabling step-by-step learning. Let us analyze this in a bit more detail by first focusing on the \textit{prediction problem}.
 
 Following the structure \eqref{eq:ch3-generalrlupdaterule} we saw in chapter 3, we can schematize a simple every-visit Monte Carlo method suitable for nonstationary environment as:
@@ -16,7 +16,7 @@ Where $V(S_t)$ is the state-value function for state $S_t$, $\alpha$ is a consta
 
 Immediately on transition to $S_{t+1}$ and receiving $R_{t+1}$. In effect, the target for the Monte Carlo update is $G_t$, whereas the target for the Temporal Difference update is $R_{t+1} + \gamma V(S_{t+1})$. This Temporal Difference method is called \textbf{TD(0)}, or \textbf{one-step TD}, because it is a special case of the \textbf{TD(}$\boldsymbol{\lambda}$\textbf{)} and $n$-step TD methods that we will see later on.
 
-\subsection{TD(0)}
+\section{TD(0)}
 An implementation of the TD(0) algorithm is shown in the box below:
 
 \begin{algorithm}[H]
@@ -48,12 +48,12 @@ We can note that the quantity in the square brackets of the TD(0) update is a so
 
 Since $\delta_t$ depends on the next state and the next reward, the TD error at time $t$ will only be available at time $t+1$.
 
-\subsection{Advantages and theoretical bases of TD methods}
+\section{Advantages and theoretical bases of TD methods}
 Given what we have seen, we can already understand that Temporal Difference methods have advantages over both methods that require a model of the environment (such as Dynamic Programming) and Monte Carlo methods, as they cannot be applied in an online, fully incremental fashion like TD. This is often crucial because we may not have a complete model of the environment or the tasks that we are studying might not be divisible into episodes (such as the case of continuing tasks).
 
 One may then ask if these methods still guarantee convergence to the correct values. Luckily, this is the case, as for any fixed policy $\pi$, TD(0) has been proven to converge to $v_\pi$ with probability 1 (under stochastic approximation conditions) if we decrease over time the value of the step size parameter $\alpha$, while only on average if $\alpha$ is statically selected to be sufficiently small.
 
-\subsection{SARSA: on-policy Temporal Difference Control}
+\section{SARSA: on-policy Temporal Difference Control}
 After seeing how to estimate the state-value function with TD(0) (the \textit{prediction problem}), we will now move on to the \textit{control problem} by introducing SARSA.
 
 SARSA is an on-policy control method (it aims to estimate and improve the policy used to make decisions) and, as such, it requires us to estimate the \textbf{action-value function} $\boldsymbol{q_\pi (s,a)}$ for the current behavior policy\footnote{Since we are talking about on-policy methods, the policy also determines our behavior, thus ``behavior policy''.}  $\pi$ and for all the states $s$ and actions $a$, rather than the state-value function $v_\pi$ as we did in TD(0) (in short, we want to learn the values of the state-action pairs rather than the values of the single states). Formally, these cases are identical: they are both Markov chains with a reward process and the theorems that assured the convergence of state values under TD(0) also apply to the corresponding algorithm for action values:
@@ -90,7 +90,7 @@ It is straightforward to design an on-policy control algorithm based on the SARS
 \caption{SARSA (on-policy TD control) for estimating $Q \approx q_*$}
 \end{algorithm}
 
-\subsection{Q-Learning: off-policy Temporal Difference Control}
+\section{Q-Learning: off-policy Temporal Difference Control}
 On-policy methods like SARSA are not the only ones available to tackle the control problem. One of the early breakthroughs in reinforcement learning, in fact, was the development in 1989 of an off-policy Temporal Difference control algorithm known as \textbf{Q-Learning} and defined by:
 \begin{equation}
     Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha \left[ R_{t+1} + \gamma \max_a Q(S_{t+1},a) - Q(S_t,A_t) \right]
@@ -120,5 +120,5 @@ As we can see, the update formula does not consider the action $A_{t+1}$ that we
 \caption{Q-Learning (off-policy TD control) for estimating $\pi \approx \pi_*$}
 \end{algorithm}
 
-\subsection{Summary}
+\section{Summary}
 The methods that we have seen in this chapter (SARSA and Q-Learning) are some of the most used ones in the reinforcement learning field, just like Decision Trees in Machine Learning and Min-Max in heuristics. They are often referred to as \textbf{tabular methods} since the state-action space must fit in a table in which every row corresponds to a state-action entry. This raises a question: what happens if we cannot fit all the entries in a table because they are too many? In that case we will need \textbf{function approximators rather than tables}: functions that, given in input the state (or the state and action), output the value function for the state (or the state and action). For these more complex cases, we will need \textbf{deep reinforcement learning}.

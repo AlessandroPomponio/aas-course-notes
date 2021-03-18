@@ -1,5 +1,5 @@
-\section{Intelligent Systems}
-\subsection{Computing machinery and intelligence}
+\chapter{Intelligent Systems}
+\section{Computing machinery and intelligence}
 The course starts by reading Turing's article \textit{``Computing machinery and intelligence''}, published on the Mind journal in October 1950 \cite{10.1093/mind/LIX.236.433}. In it, Turing complains about the intrinsic ambiguity of the question ``can machines think?'', which relies on the definition of both ``machine'' and ``think''. To reformulate this problem by means of less ambiguous words, he introduces \textbf{the imitation game}, in which an interrogator (C) tries to guess by asking questions and receiving answers, which of the other two participants (that are in a different room and that he only knows by means of the labels X and Y) is a man (A) and which is a woman (B). A's goal is to cause C to make the wrong identification, while B's goal is to help the interrogator. To limit the number of indirect clues that the interrogator may receive, the answers should be typewritten or repeated by an intermediary.
 
 Turing then suggests replacing the original question ``can machines think?'' with a new one: \textit{``what will happen when a machine\footnote{Later he restricts the definition of machine to digital computers} takes the part of A in this game? Will the interrogator decide wrongly as often when the game is played like this as he does when the game is played between a man and a woman?''}. The goal of the game is not to find out \textit{``whether all digital computers would do well in the game nor whether the computers at present available would do well, but whether there are imaginable computers which would do well''}.
@@ -16,21 +16,21 @@ Instead of producing a program to simulate an adult mind, he suggests producing 
 repetition of the events which led up to it''}. Finally, he foresees one of the problems that is still unsolved in the machine learning field: \textit{``An important feature of a learning machine is that its teacher will often be very largely ignorant of quite what is going on inside, although he may
 still be able to some extent to predict his pupil’s behaviour''}.
 
-\subsection{Intelligent machines}
+\section{Intelligent machines}
 After seeing a few examples of autonomous systems, like self-driving cars and agents that play videogames, we understand that our goal is to be able to build machines that can learn from experience, trying things out on their own, without any human intervention. We first start by giving some definitions.
 
-\subsubsection{Intelligent agents}
+\subsection{Intelligent agents}
 We define an \textbf{intelligent agent} as an entity that perceives its environment and takes actions that maximize the probability of achieving its goals. It is important to note that the agent does not know what set of actions will allow it to reach the goal, it just ``moves'' towards actions that maximize the probability of it happening. Agents may also be physically situated (we call them \textbf{robots}) or not (we refer to them as \textbf{software agents} or \textbf{bots}).
 
-\subsubsection{Adaptive agents}
+\subsection{Adaptive agents}
 We define an \textbf{adaptive agent} as an entity that can respond to changes in its environment. This is possible thanks to a lack of determinism: the agent will adapt and react to the environment (which may also include other agents) and take different actions.
 
 Learning can take place in various ways: at the end of a generation, with \textbf{natural selection} and the survival of the fittest, or during a generation, with a method that is more similar to \textbf{reinforcement learning}.
 
-\subsubsection{Autonomous agents}
+\subsection{Autonomous agents}
 We define an \textbf{autonomous agent} as an entity that only relies on its perception and acts in the world independently from its designer. A key characteristic of this type of agent is that they should be able to compensate for partial knowledge: in the beginning they may only know how to perceive the environment and how to take a certain set of actions; from a practical point of view, it makes sense to provide the agent with some knowledge of the world and the ability to learn. After sufficient experience of its environment, an intelligent agent can become effectively independent of its prior knowledge.
 
-\subsubsection{Designing agents}
+\subsection{Designing agents}
 When designing agents, we need to take into consideration the following dimensions:
 
 \begin{itemize}
@@ -42,10 +42,11 @@ When designing agents, we need to take into consideration the following dimensio
 
 A schema of how these dimensions are linked can be found in figure \ref{fig:ch1-agentenvironmentschema}, along with a few examples of agents in figure \ref{fig:ch1-agentexamples}.
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \centering
-    \includegraphics[scale=0.35]{Images/Chapter 1/agent-environment-schema.png}
+    \includegraphics{Images/Chapter 1/agent-environment-schema.png}
     \caption{Schema of the interaction between an agent and the environment.}
+    \source{Russel and Norvig, 2020}
     \label{fig:ch1-agentenvironmentschema}
 \end{figure}
 \begin{figure}[hbtp]
@@ -55,7 +56,7 @@ A schema of how these dimensions are linked can be found in figure \ref{fig:ch1-
     \label{fig:ch1-agentexamples}
 \end{figure}
 
-\subsection{Characteristics of the environments}
+\section{Characteristics of the environments}
 The environment in which our agent is situated may be of different types:
 
 \begin{itemize}
@@ -67,7 +68,7 @@ The environment in which our agent is situated may be of different types:
     \item \textbf{Single agent or multi-agent}: there may be multiple agents in the environment, and we may want them to collaborate.
 \end{itemize}
 
-\subsection{A categorization of intelligent agents}
+\section{A categorization of intelligent agents}
 There are essentially four basic kinds of agents:
 
 \begin{itemize}
@@ -79,17 +80,18 @@ There are essentially four basic kinds of agents:
 
 The behavior of these agents can be hard-wired, or it can be acquired, improved and optimized through learning.
 
-\subsubsection{Simple reflex agents}
+\subsection{Simple reflex agents}
 Simple reflex agents select actions on the basis of the current perceptions, ignoring the perception history. They are the most basic form of agents and are based on condition-action rules (also called \textbf{stimulus-response} rules, productions, or if-then rules). (See figure \ref{fig:ch1-simplereflexagent})
 
 \begin{figure}[hbt]
     \centering
-    \includegraphics[scale=0.35]{Images/Chapter 1/simple-reflex-agents.png}
+    \includegraphics{Images/Chapter 1/simple-reflex-agents.png}
     \caption{Schema of a simple reflex agent.}
+    \source{Russel and Norvig, 2020}
     \label{fig:ch1-simplereflexagent}
 \end{figure}
 
-\subsubsection{Model-based reflex agents}
+\subsection{Model-based reflex agents}
 Model-based agents keep an internal state and depend on two types of knowledge:
 
 \begin{itemize}
@@ -99,36 +101,39 @@ Model-based agents keep an internal state and depend on two types of knowledge:
 
 The internal state is essentially used to keep track of what it is not possible to see/perceive at the current time. It depends on the perception history and, for this reason, it reflects at least some of the unobserved aspects of the current state. (See figure \ref{fig:ch1-modelbasedreflexagent})
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \centering
-    \includegraphics[scale=0.35]{Images/Chapter 1/model-based-reflex-agent.png}
+    \includegraphics{Images/Chapter 1/model-based-reflex-agent.png}
     \caption{Schema of a model-based reflex agent.}
+    \source{Russel and Norvig, 2020}
     \label{fig:ch1-modelbasedreflexagent}
 \end{figure}
 
-\subsubsection{(Model-based) Goal-based agents}
+\subsection{(Model-based) Goal-based agents}
 Goal-based agents act in order to achieve their goals. If we can achieve the goal by carrying out a single action, goal-based action selection is straightforward; in the other cases, the agent needs to consider a long sequence of actions by means of search and planning. (See figure \ref{fig:ch1-goalbasedagent})
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \centering
-    \includegraphics[scale=0.35]{Images/Chapter 1/goal-based-agent.png}
+    \includegraphics{Images/Chapter 1/goal-based-agent.png}
     \caption{Schema of a goal-based agent.}
+    \source{Russel and Norvig, 2020}
     \label{fig:ch1-goalbasedagent}
 \end{figure}
 
-\subsubsection{(Model-based) Utility-based agents}
+\subsection{(Model-based) Utility-based agents}
 Goals are not sufficient to generate “high-quality behavior” in most environments, since there are usually states that are preferrable to others. In order to code this “preference”, we use utility functions that map a state (or a sequence of states) to a real number (e.g., we want to get to a destination by following the shortest or quickest path). (See figure \ref{fig:ch1-utilitybasedagent})
 
 Note that how to model these preferences is one of the current unsolved and “hot” topics in the artificial intelligence field.
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \centering
-    \includegraphics[scale=0.35]{Images/Chapter 1/utility-based-agent.png}
+    \includegraphics{Images/Chapter 1/utility-based-agent.png}
     \caption{Schema of a utility-based agent.}
+    \source{Russel and Norvig, 2020}
     \label{fig:ch1-utilitybasedagent}
 \end{figure}
 
 To conclude this first introduction, let us quickly consider the topic of learning.
 
-\subsection{Learning}
+\section{Learning}
 As we have said before, the behavior of the agents can be pre-programmed (hard-wired, fixed) or it can be learned by means of a learning component. This component can be based on a model of the world and the gain towards a certain goal (possibly expressed in terms of the change of the value of utility functions) can be expressed through rewards. This behavior is at the basis of the type of learning that we will explore in detail in this course, called \textbf{reinforcement learning}. Following Herbert Simon’s definition of autonomous and adaptive systems, we will consider \textit{``machines that think, that learn and that create''}.

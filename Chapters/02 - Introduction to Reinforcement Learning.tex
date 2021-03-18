@@ -1,11 +1,11 @@
-\section{Introduction to Reinforcement Learning}
+\chapter{Introduction to Reinforcement Learning}
 Learning from interaction is an idea that is at the basis of nearly all theories of learning and intelligence, among which we find reinforcement learning.
 
 Reinforcement learning is learning what to do and how to map situations to actions, so as to maximize a numerical reward (it is goal-directed learning from interaction). The learner is not told which actions to take, but instead it must discover which actions yield the most reward by trying them. In the most interesting and challenging cases, actions may affect not only the immediate reward but also the next situation and, through that, all subsequent rewards. These two characteristics (trial-and-error search and delayed reward) are the two most important distinguishing features of reinforcement learning.
 
 We will now introduce finite Markov decision processes, a mathematical framework that we are going to use.
 
-\subsection{Finite Markov Decision Processes}
+\section{Finite Markov Decision Processes}
 Markov Decision Processes (MDPs) are a mathematically idealized formulation of reinforcement learning for which precise theoretical statements can be made. They provide a mathematical framework for modeling decision making in situations where outcomes are partly random and partly under the control of a decision maker\footnote{See \url{https://en.wikipedia.org/wiki/Markov_decision_process}}.
 
 At each time step $t$, the process is in some state $s$, and the decision maker may choose an action $a$ that is available in state $s$. The process responds at the next time step by randomly moving into a new state $s'$, and giving the decision maker a corresponding reward $R_a(s,s')$. The probability that the process moves into its new state $s'$ is influenced by the chosen action. Specifically, it is given by the state transition function $P_a(s,s')$. Thus, the next state $s'$ depends on the current state $s$ and the decision maker's action $a$. But \textbf{given $\boldsymbol{s}$ and $\boldsymbol{a}$, it is conditionally independent of all previous states and actions}; in other words, the state transitions of an MDP satisfy the Markov property \textit{(memoryless property of a stochastic process)}.
@@ -17,7 +17,7 @@ At each time step $t$, the process is in some state $s$, and the decision maker 
     \label{fig:ch2-mdp}
 \end{figure}
 
-\subsection{Rewards and expected returns}
+\section{Rewards and expected returns}
 Informally, the agent’s goal is to maximize the \textbf{total amount} of rewards it receives (note how the agent should not maximize the immediate reward, but the cumulative reward). We can formalize this with the \textbf{``reward hypothesis''}: \textit{``That all of what we mean by goals and purposes can be well thought of as the maximization of the expected value of the cumulative sum of a received scalar signal (called reward)''}.
 
 We will now try to conceptualize the idea of \textbf{cumulative rewards} more formally by means of the notion of \textbf{expected return} $\boldsymbol{G_t}$. To do so, we first need to distinguish between two cases:
@@ -54,7 +54,7 @@ Returns at successive time steps are related to each other as follows:
     \end{split}
 \end{equation*}
 
-\subsection{Policies and value functions}
+\section{Policies and value functions}
 Almost all reinforcement learning algorithms involve estimating value functions, i.e., functions of states (or of state-action pairs) that estimate how good it is for the agent to be in a given state (or how good it is to perform a given action in a given state). The notion of ``how good'' here is defined in terms of future rewards that can be expected, or, to be precise, in terms of expected return.
 
 A \textbf{policy} is used to model how the agent will behave based on the previous experience and the rewards (and, consequently, the expected returns) an agent received in the past. Formally, a policy is a mapping from states to probabilities of each possible action (the probability of taking a certain action in a certain state). If the agent is following the policy $\pi$ at time $t$, then $\pi (a \vert s)$ is the probability that $A_t=a$ if $S_t=s$.
@@ -75,7 +75,7 @@ Similar to what we just did, we can define \textbf{the action-value function}, i
     \label{eq:ch2-actionvaluefunction}
 \end{equation}
 
-\subsection{Choosing the rewards}
+\section{Choosing the rewards}
 When we model a real system as a reinforcement learning problem, the most difficult task is selecting the right rewards. Typically, we use negative values for actions that do not help us in reaching our goal, and positive if they do (it is also possible using 0 as a value for actions that do not help us). An alternative is to set the values of the rewards to a negative number until we reach our goal (using 0 as the value when we reach it).
 
 When choosing the rewards, it is very important that \textbf{we should not ``reward'' the intermediate steps or the single actions}. The agent, in fact, always learns to maximize its reward. If we want it to do something for us, we must provide rewards to it in such a way that in maximizing them the agent will also achieve our goals. It is thus critical that the rewards we set up truly indicate what we want accomplished. If we were to give importance to certain sub-goals, the agent might find a way to achieve them without achieving the real goal (e.g., taking the opponent's pieces while playing chess but losing the game). Note that the reward signal is our way of communicating to the agent \textit{what} we want achieved, not \textit{how} (a better place for imparting this kind of prior knowledge would be the initial policy or the initial value function).
@@ -84,7 +84,7 @@ Giving rewards to the agent could be a challenging task, as we will see from the
 
 We now need to think about how we can solve this problem and estimate the value functions $v_\pi$ and $q_\pi$. If the behavior of the Markov Decision Process is known (i.e., the transition probabilities between all the states are known), we could do so by considering all the possible moves, although this poses strict requirements in terms of prior knowledge and system complexity. A more general option is to estimate them through experience: if an agent follows policy $\pi$ and maintains an average, for each state encountered, of the actual returns that have followed that state, then the average will converge asymptotically to the state’s value, $v_\pi(s)$, as the number of times that state is encountered approaches infinity (these methods are referred to as \textbf{Monte Carlo methods} because they involve averaging over many random samples of actual returns). This option is still problematic when it comes to very large number of states, though, as it would involve keeping separate averages for each state individually. In those cases, instead, we will maintain $v_\pi$ and $q_\pi$ as parametrized functions, with fewer parameters than the number of states, using approximators such as artificial neural networks.
 
-\subsection{Optimal policies and optimal value functions}
+\section{Optimal policies and optimal value functions}
 Solving a reinforcement learning task is roughly equivalent to finding a policy that maximizes the amount of reward over the long run. In finite Markov Decision Processes, there is always at least one policy $\pi$ that is better than or equal to all the other policies, meaning that its expected return is greater than or equal to that of a different policy $\pi'$ for all states. More formally:
 
 \begin{equation*}
@@ -111,8 +111,8 @@ For the state-action pair $(s,a)$, this function gives the expected return for t
     q_*(s,a) = \mathbb{E} \left[ R_{t+1} + \gamma v_* S_{t+1} \  \middle\vert \ S_t = s, A_t = a \right]
 \end{equation*}
 
-\subsection{Optimality and approximation}
-\subsubsection{Bellman equation}
+\section{Optimality and approximation}
+\subsection{Bellman equation}
 What we are doing is closely related to the issues of automatic control: we both want to have knowledge and control over the evolution of a system.
 
 For any policy $\pi$ and any state $s$, the following consistency condition holds between the value of $s$ and the value of its possible successor states:
@@ -129,7 +129,7 @@ For any policy $\pi$ and any state $s$, the following consistency condition hold
 
 What we have in the end is known as the \textbf{Bellman equation} for $v_\pi$ and it states that the value of the start state must equal the (discounted) value of the expected next state, plus the reward expected along the way.
 
-\subsubsection{Bellman optimality equation}
+\subsection{Bellman optimality equation}
 We can re-write the Bellman equation under the optimal policy, obtaining what is known as the \textbf{Bellman optimality equation}:
 
 \begin{equation}
@@ -146,13 +146,13 @@ The Bellman optimality equation is actually a system of equations, one for each 
 
 As we were hinting at earlier, it may not always be possible to solve the Bellman optimality equations, both due to the huge number of states (and equations) involved in non-trivial problems and because the state may not be fully observable, or we may not be able to know its dynamics.
 
-\subsection{Differences between Reinforcement Learning and other types of learning}
+\section{Differences between Reinforcement Learning and other types of learning}
 As the last thing in this chapter, we try to make sure we have a clear idea of the differences between reinforcement learning and other types of learning.
 
-\subsubsection{Reinforcement learning vs Supervised learning}
+\subsection{Reinforcement learning vs Supervised learning}
 Supervised learning mainly deals with classification: being able to map a certain vectorial input to a set of labels. The supervised algorithms learn by being ``fed'' labelled examples that must be representative of runtime inputs to work: this clashes with the typical reinforcement learning application scenario of unknown situations.
 
-\subsubsection{Reinforcement learning vs Unsupervised learning}
+\subsection{Reinforcement learning vs Unsupervised learning}
 Unsupervised learning deals with information provided in unlabeled datasets and tries to find patterns, typically by means of clustering based on a distance function. Reinforcement learning, despite not relying on labels of correct behavior like unsupervised learning, has the goal of maximizing a reward signal instead of trying to find a hidden structure in a dataset.
 
 In general, the most important feature distinguishing reinforcement learning from other types of learning is that it uses training information that \textbf{evaluates} the actions taken rather than \textbf{instructs} by giving correct actions.

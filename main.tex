@@ -1,6 +1,3 @@
-% Document information
-\documentclass[12pt]{article}
-
 % Usepackage
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -13,6 +10,7 @@
 \usepackage{afterpage}                  % for empty pages
 \usepackage{bbm}                        % numbers with mathbb
 \usepackage{bm}                         % bold math symbols
+\usepackage{caption}                    % captions and source
 \usepackage[
     backend=biber,
     style=alphabetic,
@@ -33,7 +31,10 @@
     \addtocounter{page}{-1}
     \newpage
     }
-    
+
+% https://tex.stackexchange.com/questions/95029/add-source-to-figure-caption
+\newcommand{\source}[1]{\vspace{-5pt} \caption*{ Source: {#1}} }
+
 % Custom operators
 \DeclareMathOperator*{\argmax}{argmax}
 
@@ -68,6 +69,7 @@ Material used for these notes includes:
 \begin{itemize}
     \item Prof. Musolesi's slides, available here: \url{https://www.mircomusolesi.org/courses/AAS20-21/AAS20-21-main/}
     \item Richard S. Sutton and Andrew G. Barto's ``Reinforcement Learning, An Introduction'' book, available here: \url{http://incompleteideas.net/book/RLbook2020.pdf}
+    \item Ian Goodfellow, Yoshua Bengio and Aaron Courville's ``Deep Learning'' book, available here: \url{https://www.deeplearningbook.org/}
 \end{itemize}
 
 \begin{wrapfigure}{r}{0.5\textwidth}
@@ -93,6 +95,7 @@ The latest version of these notes can be found in my GitHub repository here: \ur
 \input{Chapters/03 - Multi-Armed Bandits}
 \input{Chapters/04 - Monte Carlo Methods}
 \input{Chapters/05 - Temporal Difference Learning}
+\input{Chapters/06 - Introduction to Deep Learning}
 
 % Bibliography
 \clearpage
