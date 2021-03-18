@@ -14,8 +14,8 @@ jobs:
             [Two-Sided] Autonomous and Adaptive Systems Course Notes.tex
       - name: Push updated documents
         run: |
-          ls -l
           git config --global user.name 'Alessandro Pomponio'
           git config --global user.email 'alessandro.pomponio2@studio.unibo.it'
-          git commit -m "[AUTO] Update document" "[One-Sided] Autonomous and Adaptive Systems Course Notes.pdf" "[Two-Sided] Autonomous and Adaptive Systems Course Notes.pdf"
+          git add *.pdf
+          git commit -m "[AUTO] Update document"
           git push
