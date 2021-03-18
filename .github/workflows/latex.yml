@@ -14,8 +14,10 @@ jobs:
           root_file: |
             [One-Sided] Autonomous and Adaptive Systems Course Notes.tex
             [Two-Sided] Autonomous and Adaptive Systems Course Notes.tex
-      - name: Push compiled document
-        uses: actions-go/push@master
-        with:
-          commit-message: '[Auto] Update compiled document'
-          remote: origin
+      - name: Push updated documents
+        run: |
+          git config --global user.name 'Alessandro Pomponio'
+          git config --global user.email '10339005+AlessandroPomponio@users.noreply.github.com'
+          git add *.pdf
+          git commit -m "[AUTO] Update document"
+          git push
