@@ -1,7 +1,5 @@
 name: Build LaTeX document
-on:
-  push:
-    branches: [ main ]
+on: [push]
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -14,8 +12,9 @@ jobs:
           root_file: |
             [One-Sided] Autonomous and Adaptive Systems Course Notes.tex
             [Two-Sided] Autonomous and Adaptive Systems Course Notes.tex
-      - name: Push compiled document
-        uses: actions-go/push@master
-        with:
-          commit-message: '[Auto] Update compiled document'
-          remote: origin
+      - name: Push updated documents
+        run: |
+          git config --global user.name 'Alessandro Pomponio'
+          git config --global user.email 'alessandro.pomponio2@studio.unibo.it'
+          git commit -m "[AUTO] Update document" "[One-Sided] Autonomous and Adaptive Systems Course Notes.pdf" "[Two-Sided] Autonomous and Adaptive Systems Course Notes.pdf"
+          git push
