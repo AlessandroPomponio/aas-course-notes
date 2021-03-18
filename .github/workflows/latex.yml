@@ -11,7 +11,9 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: main.tex
+          root_file: |
+            [One-Sided] Autonomous and Adaptive Systems Course Notes.tex
+            [Two-Sided] Autonomous and Adaptive Systems Course Notes.tex
       - name: Push compiled document
         uses: actions-go/push@master
         with:
