@@ -114,19 +114,19 @@ Since we need to guarantee that all actions are selected ``infinitely often'', i
 With this algorithm, all the returns for each state-action pair are accumulated and averaged, irrespective of what policy was in force when they were observed. It is easy to see that it cannot converge to any suboptimal policy: if it did, then the value function would eventually converge to the value function for that policy, and that in turn would cause the policy to change. \textbf{Stability is achieved only when both the policy and the value function are optimal}.
 
 \subsection{Monte Carlo Control without Exploring Starts}
-As we mentioned earlier on, the assumption of exploring starts is often unlikely to be valid; a possible alternative is to use \textbf{soft policies}, meaning that each action in each state has a nonzero probability of being chosen ($\pi(a \vert s) > 0, \forall s\in\mathcal{S},a\in\mathcal{A}(s)$), but gradually shifts closer and closer to a deterministic, optimal policy. The $\epsilon$-greedy policy we have already seen previously is an example of $\epsilon$-soft policy, in which all non-greedy actions have a (small) probability $\frac{\epsilon}{\left\vert \mathcal{A}(s) \right\vert}$ of being selected.
+As we mentioned earlier on, the assumption of exploring starts is often unlikely to be valid; a possible alternative is to use \textbf{soft policies}, meaning that each action in each state has a nonzero probability of being chosen ($\pi(a \vert s) > 0, \forall s\in\mathcal{S},a\in\mathcal{A}(s)$), but gradually shifts closer and closer to a deterministic, optimal policy. The $\varepsilon$-greedy policy we have already seen previously is an example of $\varepsilon$-soft policy, in which all non-greedy actions have a (small) probability $\frac{\varepsilon}{\left\vert \mathcal{A}(s) \right\vert}$ of being selected.
 
-Contrarily to what we did under the assumption of exploring starts, we cannot simply improve the policy by making it greedy with respect to the current value function, as it would prevent any exploration of the nongreedy actions. Fortunately, the Generalized Policy Iteration method does not require that the policy be taken all the way to a greedy policy, but only that it be moved \textit{towards} a greedy policy. That any $\epsilon$-greedy policy with respect to $q_\pi$ is an improvement over any $\epsilon$-soft policy $\pi$ is once again assured by the policy improvement theorem.
+Contrarily to what we did under the assumption of exploring starts, we cannot simply improve the policy by making it greedy with respect to the current value function, as it would prevent any exploration of the nongreedy actions. Fortunately, the Generalized Policy Iteration method does not require that the policy be taken all the way to a greedy policy, but only that it be moved \textit{towards} a greedy policy. That any $\varepsilon$-greedy policy with respect to $q_\pi$ is an improvement over any $\varepsilon$-soft policy $\pi$ is once again assured by the policy improvement theorem.
 
-The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\epsilon}$-soft policies) algorithm} is presented in the box below:
+The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\varepsilon}$-soft policies) algorithm} is presented in the box below:
 
 \begin{algorithm}[H]
 \SetAlgoLined
-\Parameters{small $\epsilon > 0$}
+\Parameters{small $\varepsilon > 0$}
 \Initialize{
     \\
     \Indp % add indent
-    $\pi \leftarrow$ an arbitrary $\epsilon$-soft policy \\
+    $\pi \leftarrow$ an arbitrary $\varepsilon$-soft policy \\
     $Q(s,a) \in \mathbb{R}$ (arbitrarily), $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
     $Returns(s,a) \leftarrow $ an empty list, $\forall s \in \mathcal{S}, a \in \mathcal{A}(s)$ \\
     \Indm % remove indent
@@ -145,8 +145,8 @@ The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\epsilon
             \begin{equation*}
                 \pi(a \vert S_t) \leftarrow
                 \begin{cases}
-                            1 - \epsilon + \frac{\epsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a = A^* \\
-                            \frac{\epsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a \neq A^*
+                            1 - \varepsilon + \frac{\varepsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a = A^* \\
+                            \frac{\varepsilon}{\left\vert \mathcal{A}(S_t) \right\vert} \quad & \text{if} \  a \neq A^*
                 \end{cases}
             \end{equation*}
         }
