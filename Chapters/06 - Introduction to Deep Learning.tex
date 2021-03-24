@@ -27,3 +27,108 @@ The picture below sums up the differences between various types of artificial in
     \source{Goodfellow et al. 2016}
     \label{fig:ch6-aitypesdifferences}
 \end{figure}
+
+\subsection{From theories of Biological Learning to Deep Learning}
+Deep learning only \textit{appears} to be new due to its recent meteoric rise in popularity. As a matter of fact, instead, deep learning has been around since the 1940s, facing alternating periods of fervor and disappointment. There have been three main waves of development of deep learning:
+
+\begin{itemize}
+    \item Cybernetics (1940s-1960s).
+    \item Connectionism (1980s-1990s).
+    \item Deep learning (2006-today).
+\end{itemize}
+
+Let us now dive deeper into each of them.
+
+\subsubsection{Cybernetics}
+The origins of deep learning go by the name of ``cybernetics'', a term that became widespread thanks to Norbert Weiner’s book ``Cybernetics: control and communication in the animal and machine''. As we can imagine from this title, neuroscience was of great inspiration in this period: some of the earliest learning algorithms, in fact, were intended to be computational models of biological learning, attempting to reproduce what happens (or could happen) in the brain. The brain, in fact, provided a proof by example that intelligent behavior was possible, and a conceptually straightforward path to building intelligence seemed to be to reverse engineer the computational principles behind the brain and to duplicate its functionality. As a result, one of the names that deep learning has gone by is \textbf{artificial neural networks (ANNs)}. This school of thought led to the creation of simple linear models designed to take a set of $n$ input values $x_1,..., x_n$ and associate them with an output $y$. They would then learn a set of weights $w_1,...,w_n$ and compute the output $y=f(\boldsymbol{x},\boldsymbol{w})=x_1 w_1+...+x_n w_n$.
+
+As a brief excursus and to understand the thought process that led to this formulation, we will now spend a few words describing what neurons are and how they work.
+
+Neurons are electrically excitable cells that communicate with other cells via specialized connections called synapses. Communication consists of an all-or-nothing electrochemical pulse (of the same intensity each time the cell is stimulated) that takes place when the voltage of the neuron membrane changes by a large enough amount over a short interval. A typical neuron consists of a cell body (soma), dendrites and a single axon (the latter two being filaments that extrude from the soma) and can be seen in figure \ref{fig:ch6-multipolarneuron}.
+
+\begin{figure}[hbt]
+    \centering
+    \includegraphics[scale=0.15]{Images/Chapter 6/multipolar neuron.png}
+    \caption{Anatomy of a multipolar neuron.}
+    \source{BruceBlaus on Wikipedia}
+    \label{fig:ch6-multipolarneuron}
+\end{figure}
+
+Warren McCulloch (a neuroscientist) and Walter Pitts (a logician) studied the behavior of neurons and concluded that \textit{``Because of the ``all-or-none'' character of nervous activity, neural events and the relations among them can be treated by means of propositional logic''} \cite{MCCULLOCH199099}. In that article they also proposed a model of a simple artificial neuron which output 1 if the weighted sum of the inputs was above a certain threshold and 0 otherwise. Inputs could only have two values, 0 and 1, and be interpreted as \textit{excitatory} or \textit{inhibitory} according to their weights (+1 or -1). This model enabled operations such as \texttt{NOT} (one inhibitory input, with output threshold 0), \texttt{AND} ($n$ excitatory inputs with threshold $n$) and \texttt{OR} ($n$ excitatory inputs with threshold 1) by changing the weights of the inputs. A schema of their model can be found in figure \ref{fig:ch6-mccullochpittsartificialneuron}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{Images/Chapter 6/mcculloch-pitts neuron.png}
+    \caption{A schema of McCulloch and Pitt's artificial neuron.}
+    \label{fig:ch6-mccullochpittsartificialneuron}
+\end{figure}
+
+It is important to note that in their model the weights are \textbf{fixed} and must be set by a human operator. In 1949, though, the neuropsychologist Donald Hebb very importantly pointed out in his book “The Organization of Behavior” that \textit{``When an axon of cell A is near enough to excite a cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A’s efficiency, as one of the cells firing B, is increased''} \cite{10.1007/978-3-642-70911-1_15}. This means that synaptic connections are reinforced when two or more neurons are activated contiguously in time and space. In simpler words, ``Neurons that fire together, wire together'': the more we do something, the more ``habitual'' that learning will become. Hebb’s model led to the first simulations of artificial neural networks in the 1950s and can be seen in figure \ref{fig:ch6-hebbneuronmodel}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{Images/Chapter 6/hebb neuron model.png}
+    \caption{Hebb's neuron model}
+    \label{fig:ch6-hebbneuronmodel}
+\end{figure}
+
+The Hebbian network model has a $n$-node input layer $\boldsymbol{x} = \left[x_1,x_2,...,x_n \right]^T$ and a $m$-node output layer $\boldsymbol{y} = \left[ y_1,y_2, ... ,y_m \right]^T$, with each output being the weighted sum of the corresponding inputs:
+
+\begin{equation*}
+    y_i = \sum_{j=1}^{n} w_{j,i} x_j 
+\end{equation*}
+
+The strengthening of the connections is represented by the following learning rule:
+
+\begin{equation*}
+    w_{j,i}^{new} \leftarrow w_{j,i}^{old} + \eta x_j y_i
+\end{equation*}
+
+Where $\eta$ is the \textbf{learning rate}. \emph{It must be noted that this model is different from the way current neural networks work}.
+
+We had to wait until 1958, when Frank Rosenblatt created the \textbf{Perceptron} --a model for a machine that could learn the weights of different categories given examples of those categories-- for these ideas to be put into practice. 
+
+Unfortunately, linear models such as the ones we just presented have many limitations (most famously, they cannot learn the \texttt{XOR} function) and this contributed to a period of disappointment and of little work on this field known as the “AI winter”.
+
+\subsubsection{Connectionism}
+The second wave of research on neural networks emerged in the 1980s primarily via a movement called \textbf{connectionism} or \textbf{parallel distributed processing}. Their core idea was that \textbf{many simple computational units could achieve intelligent behavior when networked together}. 
+
+Several key concepts that arose from the connectionist movement remain central to today’s deep learning. Among these we find:
+
+\begin{itemize}
+    \item \textbf{Distributed representation}: each concept is not represented by a single neuron, but by a pattern of activation over a large number of neurons. The advantage of distributed representation is that when a small random subset of the network is altered it does not change the macroscopic behavior of the network. However, the disadvantage is that it is hard to interpret or modify the connection strength of the network by an outside observer.
+    \item The \textbf{backpropagation algorithm} for training neural networks: the error obtained from the output layer is propagated backwards to the hidden layer and is used to guide training of the weights between the hidden layer and the input layer.
+\end{itemize}
+
+Another very important idea that can be found --along with the previous ones-- in a book titled ``Parallel Distributed Processing'' is that of ``Learning and Relearning in Boltzmann Machines'' \cite{10.5555/104279.104291}. A Boltzmann Machine is a network of symmetrically connected, neuron-like units that make stochastic decisions about whether to be on or off based on the data fed to the network while training. We consider two types of Boltzmann Machines, which we can also see in figure \ref{fig:ch6-boltzmannmachines}:
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{Images/Chapter 6/boltzmann machines.png}
+    \caption{Boltzmann machines}
+    \label{fig:ch6-boltzmannmachines}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Restricted Boltzmann Machines}, made up of an input and a hidden layer. In this machine neurons must form a bipartite graph\footnote{A graph whose vertices can be divided into two disjoint and independent sets $U$ and $V$ such that every edge connects a vertex in $U$ to one in $V$, see \url{https://en.wikipedia.org/wiki/Bipartite_graph}}.
+    \item \textbf{Deep Boltzmann Machines} in which there may be multiple hidden layers, with hidden nodes connected to each other.
+\end{itemize}
+
+Note that, unlike most neural networks, the connections are bidirectional and there is no output layer. The training phase for this network leverages the bidirectionality, as it allows for a continuous feedback loop between the input and the hidden layer that is bound to eventually stabilize, allowing the determination of the connection weights. The lack of an output layer is instead explained by the generative nature of these networks: if we give them a partial input (like a section of an image), the network will generate the missing parts, effectively making the results appear in the input layer.
+
+\subsection{Second AI winter and the current AI summer}
+The amount of progress being made at the time led to the creation of unrealistic expectations that, once they could not be met, brought in a second AI winter that lasted until the mid-1990s.
+
+The current AI summer, instead, started in 2006, when Geoffrey Hinton and Simon Osindero proposed \textit{``A fast learning algorithm for deep belief nets''}  \cite{10.1162/neco.2006.18.7.1527} (with a strategy called \textit{greedy layer-wise pre-training}) that enabled fast training even for networks with high dimensionality.
+
+This breakthrough opened up a myriad of new possibilities for deep learning. Nowadays, in fact, deep learning applications are aplenty: 
+
+\begin{itemize}
+    \item Computer vision.
+    \item Machine translation.
+    \item Speech generation.
+    \item Protein folding.
+    \item ...
+\end{itemize}
+
+One of deep learning's biggest achievements (and the more relevant one for us) has been its extension to the field of reinforcement learning, enabling what is now known as \textbf{deep reinforcement learning}.
