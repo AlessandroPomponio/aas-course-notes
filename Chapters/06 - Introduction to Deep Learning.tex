@@ -60,6 +60,7 @@ Warren McCulloch (a neuroscientist) and Walter Pitts (a logician) studied the be
     \centering
     \includegraphics[scale=0.35]{Images/Chapter 6/mcculloch-pitts neuron.png}
     \caption{A schema of McCulloch and Pitt's artificial neuron.}
+    \source{Prof. Mirco Musolesi}
     \label{fig:ch6-mccullochpittsartificialneuron}
 \end{figure}
 
@@ -69,6 +70,7 @@ It is important to note that in their model the weights are \textbf{fixed} and m
     \centering
     \includegraphics[scale=0.5]{Images/Chapter 6/hebb neuron model.png}
     \caption{Hebb's neuron model}
+    \source{Prof. Mirco Musolesi}
     \label{fig:ch6-hebbneuronmodel}
 \end{figure}
 
@@ -106,6 +108,7 @@ Another very important idea that can be found --along with the previous ones-- i
     \centering
     \includegraphics[scale=0.5]{Images/Chapter 6/boltzmann machines.png}
     \caption{Boltzmann machines}
+    \source{Goodfellow et al. 2016}
     \label{fig:ch6-boltzmannmachines}
 \end{figure}
 
@@ -132,3 +135,54 @@ This breakthrough opened up a myriad of new possibilities for deep learning. Now
 \end{itemize}
 
 One of deep learning's biggest achievements (and the more relevant one for us) has been its extension to the field of reinforcement learning, enabling what is now known as \textbf{deep reinforcement learning}.
+
+\section{Deep Neural Networks}
+After a general overview of the history of deep learning, we now move on to more practical details about how deep neural networks work. Let us start by looking at the structure of a modern neural network and the corresponding schematized version we will use in this course (figure \ref{fig:ch6-dnnandschema}).
+
+\begin{figure}[h]
+    \hfill
+    \subfigure[]{\includegraphics[width=5cm]{Images/Chapter 6/deep_neural_network.png}}
+    \hfill
+    \subfigure[]{\includegraphics[width=5cm]{Images/Chapter 6/dnn notation.png}}
+    \hfill
+    \caption{(a) A modern deep neural network and (b) the simplified notation we will use in this course}
+    \source{(a) andrewkruger on GitHub, (b) prof. Mirco Musolesi}
+    \label{fig:ch6-dnnandschema}
+\end{figure}
+
+These types of networks are known as \textbf{deep feedforward networks} or \textbf{multilayer perceptrons (MLP)} and are the quintessential deep learning models. Their goal is to approximate some function $f^*$: for example, for a classifier, $y=f^* (\boldsymbol{x})$ maps an input $\boldsymbol{x}$ to a category $y$. A feedforward network defines a mapping $y=f(\boldsymbol{x},\boldsymbol{\theta})$ and learns the value of the parameters $\boldsymbol{\theta}$ that result in the best function approximation. This is done by feeding the network some training data and comparing our estimates to the true labels by means of a \textbf{loss function}. The \textbf{loss scores} thus obtained, will then be given to an \textbf{optimizer} which will update the weights, as we can see from figure \ref{fig:ch6-lossoptimizationdnn}.
+
+\begin{figure}[hp]
+    \centering
+    \includegraphics[scale=0.5]{Images/Chapter 6/dnn-loss-optimizer.png}
+    \caption{Loss scores optimization in a DNN}
+    \source{Prof. Mirco Musolesi}
+    \label{fig:ch6-lossoptimizationdnn}
+\end{figure}
+
+Each neuron (also referred to as unit or node) of the network will then be as shown in figure \ref{fig:ch6-dnnunit}.
+
+\begin{figure}[hp]
+    \centering
+    \includegraphics[scale=0.5]{Images/Chapter 6/dnn-unit.png}
+    \caption{A neuron of a DNN}
+    \source{Prof. Mirco Musolesi}
+    \label{fig:ch6-dnnunit}
+\end{figure}
+
+Where $f$ is the activation function, a nonlinear combination of the inputs and the weights, and $b$ is the \textbf{bias}, a fixed, (typically) random value that works as ``noise'' for the network and that helps in avoiding suboptimal solutions.
+
+There are many activation functions, with various characteristics and properties. Among the most common ones\footnote{For a more comprehensive list of activation functions, one can visit the following Wikipedia page: \url{https://en.wikipedia.org/wiki/Activation_function}.} we find:
+
+\begin{itemize}
+    \item \textbf{Rectified Linear Unit (RELU)}: given the value $z$ in input, it returns $\max(0,z)$.
+    \item \textbf{Logistic sigmoid}: given the value $z$ in input, it returns $\frac{1}{1+e^z}$.
+    \item \textbf{Arctan}: given the value $z$ in input, it returns $\tan^{-1}z$.
+    \item \textbf{Softmax}: given a vector of real numbers in input $\boldsymbol{z}$ of dimension $n$, the softmax function normalizes it into a probability distribution consisting of $n$ probabilities proportional to the exponential of each element $z_i$ of the vector $\boldsymbol{z}$.
+\end{itemize}
+
+It is very important to note that, while the RELU function, the logistic sigmoid and the arctangent only receive in input (and output) a single real value, \textbf{the softmax function receives in input a vector of real numbers, and outputs a vector of the same dimension}. This is particularly useful for the output layer of our network in classification problems: we can use one of the 1-dimensional activation functions in the hidden layers and use the softmax function to output probabilities of the input belonging to one of the $n$ classes of our classification problem. Formally, the softmax function is defined as such:
+
+\begin{equation}
+    \text{softmax}(\boldsymbol{z})_i= \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}} \  \text{for } i = 1, ..., n
+\end{equation}
