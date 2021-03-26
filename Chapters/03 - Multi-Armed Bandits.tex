@@ -4,7 +4,7 @@ In this chapter we want to study the evaluative and explorative aspects of reinf
 \section{The k-armed bandit problem}
 To do so, we introduce the \textbf{$\boldsymbol{k}$-armed bandit problem} (a slot machine with $k$ levers), where we must choose between $k$ different options (the $k$ arms of the bandit) and after each choice we receive a reward taken from a \textbf{stationary} probability distribution depending on the action we selected. Our objective is to maximize the expected total reward over a certain number of time steps.
 
-As a note, there is a different version of the $k$-armed bandit problem, known as \textbf{contextual bandits}, in which we do consider the state but assume that it does not depend on the previous actions. This problem is at the basis of ad-serving platforms.
+As a note, there is a different version of the $k$-armed bandit problem, known as \textbf{contextual bandits}, in which we do consider the state but assume that it does not depend on previous actions. This problem is at the basis of ad-serving platforms.
 
 Let us now see things from a more formal point of view: in our $k$-armed bandit problem, each of the $k$ actions has an expected or mean reward given that that action is selected; let us call this the \textit{value} of that action. We denote the action selected on time step $t$ as $A_t$, and the corresponding reward as $R_t$. Our goal is then to maximize the following:
 
@@ -20,7 +20,7 @@ Since one of the assumptions of this problem is that the state does not depend o
     = \mathbb{E} \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \  \middle\vert \  S_t = \bar{s}, A_t = a \right]
 \end{gather*}
 
-The value of an arbitrary action a denoted as $q_*(a)$ is the expected reward given that $a$ is selected. More formally:
+The value of an arbitrary action $a$ denoted as $q_*(a)$ is the expected reward given that $a$ is selected. More formally:
 
 \begin{equation*}
     q_*(a) \doteq \mathbb{E} \left[ R_t \  \middle\vert \  A_t = a \right]
@@ -91,7 +91,7 @@ The averaging method we just discussed is appropriate for stationary bandit prob
     \label{eq:ch3-nonstationaryincrementalupdaterule}
 \end{equation}
 
-\textbf{This results in $\boldsymbol{Q_{n+1}}$ being a weighted average of past rewards and the initial estimate $Q_1$:}
+\textbf{This results in $\boldsymbol{Q_{n+1}}$ being a weighted average of past rewards and the initial estimate $\boldsymbol{Q_1}$}:
 
 \begin{equation}
     \begin{split}
@@ -124,7 +124,7 @@ This is called a weighted average since the sum of the weights $(1 - \alpha)^n +
 The quantity $1 - \alpha$ is less than $1$, and thus the weight given to $R_i$ decreases as the number of rewards increases. In fact, the weight decreases exponentially according to the exponent on $1 - \alpha$; accordingly, this is sometimes called an \textbf{exponential recency-weighted average}.
 
 \section{Optimistic initial values}
-All the methods that we have discussed until now depend to some extent on the initial action-value estimates (they are \textbf{biased} by their initial estimates). For the sample-average methods, the bias disappears once all actions have been selected at least once, but for methods with a constant $\alpha$ the bias is permanent (although decreasing over time as given by the equation \eqref{eq:ch3-exponentialrecencyweightedaverage}). In practice, this kind of bias is usually not a problem and can sometimes be helpful, especially to supply some prior knowledge or to encourage exploration. The downside is that the initial estimates become, in effect, a set of parameters that must be picked by the user.
+All the methods that we have discussed until now depend to some extent on the initial action-value estimates (they are \textbf{biased} by their initial estimates). For the sample-average methods, the bias disappears once all actions have been selected at least once, while for methods with a constant $\alpha$ the bias is permanent (although decreasing over time as given by the equation \eqref{eq:ch3-exponentialrecencyweightedaverage}). In practice, this kind of bias is usually not a problem and can sometimes be helpful, especially to supply some prior knowledge or to encourage exploration. The downside is that the initial estimates become, in effect, a set of parameters that must be picked by the user.
 
 Choosing a wildly optimistic initial value encourages action-value methods to explore: whichever actions are initially selected, the reward is less than the starting estimates; the learner will then switch to other actions, being ``disappointed'' with the rewards it is receiving. The result is that all actions are tried several times before the value estimates converge, making the system do a fair amount of exploration even with a fully greedy action selection strategy. Initially, the optimistic method performs worse because it explores more, but eventually it performs better as its exploration decreases with time. We call this technique for encouraging exploration \textbf{optimistic initial values}. It is a simple trick that can be quite effective on stationary problems, while it is not well suited to nonstationary problems, as its drive for exploration is inherently temporary (any method that focuses on the initial conditions is unlikely to help with the general nonstationary case).
 

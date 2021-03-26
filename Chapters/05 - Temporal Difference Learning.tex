@@ -14,7 +14,7 @@ Where $V(S_t)$ is the state-value function for state $S_t$, $\alpha$ is a consta
     \label{eq:ch5-genericonpolicytdupdate}
 \end{equation}
 
-Immediately on transition to $S_{t+1}$ and receiving $R_{t+1}$. In effect, the target for the Monte Carlo update is $G_t$, whereas the target for the Temporal Difference update is $R_{t+1} + \gamma V(S_{t+1})$. This Temporal Difference method is called \textbf{TD(0)}, or \textbf{one-step TD}, because it is a special case of the \textbf{TD(}$\boldsymbol{\lambda}$\textbf{)} and $n$-step TD methods that we will see later on.
+Immediately on transition to $S_{t+1}$ and receiving $R_{t+1}$. In effect, the target for the Monte Carlo update is $G_t$, whereas the target for the Temporal Difference update is $R_{t+1} + \gamma V(S_{t+1})$. This Temporal Difference method is called \textbf{TD(0)}, or \textbf{one-step TD}, because it is a special case of \textbf{TD(}$\boldsymbol{\lambda}$\textbf{)} and $\boldsymbol{n}$\textbf{-step TD methods}.
 
 \section{TD(0)}
 An implementation of the TD(0) algorithm is shown in the box below:

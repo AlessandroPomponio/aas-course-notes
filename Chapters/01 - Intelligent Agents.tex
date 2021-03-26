@@ -4,7 +4,7 @@ The course starts by reading Turing's article \textit{``Computing machinery and 
 
 Turing then suggests replacing the original question ``can machines think?'' with a new one: \textit{``what will happen when a machine\footnote{Later he restricts the definition of machine to digital computers} takes the part of A in this game? Will the interrogator decide wrongly as often when the game is played like this as he does when the game is played between a man and a woman?''}. The goal of the game is not to find out \textit{``whether all digital computers would do well in the game nor whether the computers at present available would do well, but whether there are imaginable computers which would do well''}.
 
-In the last chapter, Turing shows a handful of solutions to tackle the problem of learning machines, which he argues to be a programming problem; he starts with an analysis of the human brain which, to him, has three components:
+In the last chapter, Turing shows a handful of solutions to tackle the problem of learning machines, that he argues to be a programming problem; he starts with an analysis of the human brain which, to him, has three components:
 
 \begin{itemize}
     \item The initial state of the mind (say at birth).
@@ -25,7 +25,7 @@ We define an \textbf{intelligent agent} as an entity that perceives its environm
 \subsection{Adaptive agents}
 We define an \textbf{adaptive agent} as an entity that can respond to changes in its environment. This is possible thanks to a lack of determinism: the agent will adapt and react to the environment (which may also include other agents) and take different actions.
 
-Learning can take place in various ways: at the end of a generation, with \textbf{natural selection} and the survival of the fittest, or during a generation, with a method that is more similar to \textbf{reinforcement learning}.
+Learning can take place in two ways: at the end of a generation, with \textbf{natural selection} and the survival of the fittest, or during a generation, with a method that is more similar to \textbf{reinforcement learning}.
 
 \subsection{Autonomous agents}
 We define an \textbf{autonomous agent} as an entity that only relies on its perception and acts in the world independently from its designer. A key characteristic of this type of agent is that they should be able to compensate for partial knowledge: in the beginning they may only know how to perceive the environment and how to take a certain set of actions; from a practical point of view, it makes sense to provide the agent with some knowledge of the world and the ability to learn. After sufficient experience of its environment, an intelligent agent can become effectively independent of its prior knowledge.
@@ -79,10 +79,10 @@ There are essentially four basic kinds of agents:
     \item \textbf{Utility-based agents}.
 \end{itemize}
 
-The behavior of these agents can be hard-wired, or it can be acquired, improved and optimized through learning.
+The behavior of these agents can be hard-wired, or it can be acquired, improved, and optimized through learning.
 
 \subsection{Simple reflex agents}
-Simple reflex agents select actions on the basis of the current perceptions, ignoring the perception history. They are the most basic form of agents and are based on condition-action rules (also called \textbf{stimulus-response} rules, productions, or if-then rules). (See figure \ref{fig:ch1-simplereflexagent})
+Simple reflex agents (figure \ref{fig:ch1-simplereflexagent}) select actions on the basis of the current perceptions, ignoring the perception history. They are the most basic form of agents and are based on condition-action rules (also called \textbf{stimulus-response} rules, productions, or if-then rules).
 
 \begin{figure}[hbt]
     \centering
@@ -93,14 +93,14 @@ Simple reflex agents select actions on the basis of the current perceptions, ign
 \end{figure}
 
 \subsection{Model-based reflex agents}
-Model-based agents keep an internal state and depend on two types of knowledge:
+Model-based agents (figure \ref{fig:ch1-modelbasedreflexagent}) keep an internal state and depend on two types of knowledge:
 
 \begin{itemize}
     \item How the world evolves independently from the agent (e.g., the trajectory that a bullet/a stone follows when shot/thrown).
     \item How the actions of the agent affect the world (e.g., if I turn the wheel to the right, the car moves to the right).
 \end{itemize}
 
-The internal state is essentially used to keep track of what it is not possible to see/perceive at the current time. It depends on the perception history and, for this reason, it reflects at least some of the unobserved aspects of the current state. (See figure \ref{fig:ch1-modelbasedreflexagent})
+The internal state is essentially used to keep track of what it is not possible to see/perceive at the current time. It depends on the perception history and, for this reason, it reflects at least some of the unobserved aspects of the current state.
 
 \begin{figure}[hbtp]
     \centering
@@ -111,7 +111,7 @@ The internal state is essentially used to keep track of what it is not possible 
 \end{figure}
 
 \subsection{(Model-based) Goal-based agents}
-Goal-based agents act in order to achieve their goals. If we can achieve the goal by carrying out a single action, goal-based action selection is straightforward; in the other cases, the agent needs to consider a long sequence of actions by means of search and planning. (See figure \ref{fig:ch1-goalbasedagent})
+Goal-based agents (figure \ref{fig:ch1-goalbasedagent}) act in order to achieve their goals. If we can achieve the goal by carrying out a single action, goal-based action selection is straightforward; in the other cases, the agent needs to consider a long sequence of actions by means of search and planning.
 
 \begin{figure}[hbtp]
     \centering

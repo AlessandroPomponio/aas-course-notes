@@ -46,7 +46,7 @@ The algorithm for the \textit{first-visit Monte Carlo Prediction} is shown here:
  \caption{First-visit Monte Carlo Prediction}
 \end{algorithm}
 
-This means generating an episode where we play following policy $\pi$ (the set of probabilities associated to each action) and analyzing the ``trajectory'' that we followed during the game in a backwards manner. During this phase we will calculate the values for all the states that we traversed and the average cumulative reward we can expect from them.
+This means generating an episode where we play following policy $\pi$ (the set of probabilities associated to each action) and analyzing the ``trajectory'' that we followed during the game in a backwards manner. During this phase we will calculate the values for all the states that we traversed for the first time and the average cumulative reward we can expect from them.
 
 \subsection{Every-visit (multi-visit) Monte Carlo Prediction}
 If we remove from the \textit{first-visit Monte Carlo Prediction} algorithm the check on whether a state $S_t$ has already occurred, we obtain the \textbf{every-visit Monte Carlo Prediction}, which also converges to $v_\pi (s)$ as the number of visits to a certain state $s$ goes to infinity.

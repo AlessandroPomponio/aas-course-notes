@@ -1,7 +1,7 @@
 \chapter{Introduction to Reinforcement Learning}
 Learning from interaction is an idea that is at the basis of nearly all theories of learning and intelligence, among which we find reinforcement learning.
 
-Reinforcement learning is learning what to do and how to map situations to actions, so as to maximize a numerical reward (it is goal-directed learning from interaction). The learner is not told which actions to take, but instead it must discover which actions yield the most reward by trying them. In the most interesting and challenging cases, actions may affect not only the immediate reward but also the next situation and, through that, all subsequent rewards. These two characteristics (trial-and-error search and delayed reward) are the two most important distinguishing features of reinforcement learning.
+\textbf{Reinforcement learning is learning what to do and how to map situations to actions, so as to maximize a numerical reward} (it is goal-directed learning from interaction). The learner is not told which actions to take, but instead it must discover which actions yield the most reward by trying them. In the most interesting and challenging cases, actions may affect not only the immediate reward but also the next situation and, through that, all subsequent rewards. These two characteristics (trial-and-error search and delayed reward) are the two most important distinguishing features of reinforcement learning.
 
 We will now introduce finite Markov decision processes, a mathematical framework that we are going to use.
 
@@ -31,12 +31,12 @@ We will now try to conceptualize the idea of \textbf{cumulative rewards} more fo
 The expected return $G_t$ associated to the selection of an action $A_t$, assuming that the agent receives over time a sequence of rewards $R_{t+1}, R_{t+2}, R_{t+3}, ...$ is defined as:
 
 \begin{itemize}
-    \item The sum of the future rewards \textbf{in the case of episodic tasks}:
+    \item The \textbf{sum of the future rewards} in the case of \textbf{episodic tasks}:
     \begin{equation}
         G_t \doteq R_{t+1} + R_{t+2} + R_{t+3} + ... + R_t
         \label{eq:ch2-expectedreturn-episodic}
     \end{equation}
-    \item The weighted sum of the future rewards \textbf{in the case of continuing tasks}:
+    \item The \textbf{weighted sum of the future rewards} in the case of \textbf{continuing tasks}:
     \begin{equation}
         G_t \doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}
         \label{eq:ch2-expectedreturn-continuous}
@@ -60,7 +60,7 @@ Almost all reinforcement learning algorithms involve estimating value functions,
 
 A \textbf{policy} is used to model how the agent will behave based on the previous experience and the rewards (and, consequently, the expected returns) an agent received in the past. Formally, a policy is a mapping from states to probabilities of each possible action (the probability of taking a certain action in a certain state). If the agent is following the policy $\pi$ at time $t$, then $\pi (a \vert s)$ is the probability that $A_t=a$ if $S_t=s$.
 
-\textbf{The value function of a state $\boldsymbol{s}$ under a policy $\boldsymbol{\pi}$}, denoted $v_\pi (s)$, is the expected return when starting in $s$ and following $\pi$ thereafter (the expected return I can have in the future state, considering all the actions I might take from there). For Markov Decision Processes, we can define \textbf{the state-value function} $v_\pi$ for the policy $\pi$ formally as:
+\textbf{The value function of a state $\boldsymbol{s}$ under a policy $\boldsymbol{\pi}$}, denoted $v_\pi (s)$, is the expected return when starting in $s$ and following $\pi$ thereafter (the expected return I can have in the future state, considering all the actions I might take from there). For Markov Decision Processes, we can define \textbf{the state-value function} $\boldsymbol{v_\pi}$ for the policy $\pi$ formally as:
 
 \begin{equation}
     v_\pi(s) \doteq \mathbb{E}_\pi \left[ G_t  \ \vert \  S_t = s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty}  \gamma^k R_{t+k+1} \  \middle\vert \  S_t = s, A_t = a \right] \quad \forall s \in \mathcal{S}
@@ -69,7 +69,7 @@ A \textbf{policy} is used to model how the agent will behave based on the previo
 
 Where $\mathbb{E}_\pi [\cdot]$ denotes the expected value of a random variable given that the agent follows $\pi$ and $t$ is any time step. Note that the value of the terminal state, if any, is always $0$. The formula above denotes a weighted average of the expected value (it is averaged because the values depend on the probability of a certain action being taken, which is a fraction).
 
-Similar to what we just did, we can define \textbf{the action-value function}, i.e., the value of taking an action $a$ in the state $s$ under a policy $\pi$, denoted $q_\pi (s,a)$, as the expected return starting from $s$, taking the action $a$, and following the policy $\pi$ thereafter:
+Similar to what we just did, we can define \textbf{the action-value function}, i.e., the value of taking an action $a$ in the state $s$ under a policy $\pi$, denoted $\boldsymbol{q_\pi (s,a)}$, as the expected return starting from $s$, taking the action $a$, and following the policy $\pi$ thereafter:
 
 \begin{equation}
     q_\pi(s,a) \doteq \mathbb{E}_\pi \left[ G_t \  \vert \  S_t = s, A_t = a \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \  \middle\vert \ S_t = s, A_t = a \right]
