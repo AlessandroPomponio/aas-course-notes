@@ -181,8 +181,80 @@ There are many activation functions, with various characteristics and properties
     \item \textbf{Softmax}: given a vector of real numbers in input $\boldsymbol{z}$ of dimension $n$, the softmax function normalizes it into a probability distribution consisting of $n$ probabilities proportional to the exponential of each element $z_i$ of the vector $\boldsymbol{z}$.
 \end{itemize}
 
-It is very important to note that, while the RELU function, the logistic sigmoid and the arctangent only receive in input (and output) a single real value, \textbf{the softmax function receives in input a vector of real numbers, and outputs a vector of the same dimension}. This is particularly useful for the output layer of our network in classification problems: we can use one of the 1-dimensional activation functions in the hidden layers and use the softmax function to output probabilities of the input belonging to one of the $n$ classes of our classification problem. Formally, the softmax function is defined as such:
+It is very important to note that, while the RELU function, the logistic sigmoid and the arctangent only receive in input (and output) a single real value, \textbf{the softmax function receives in input a vector of real numbers, and outputs a vector of the same dimension}. This is particularly useful for the output layer of our network in classification problems: we can use one of the 1-dimensional activation functions in the hidden layers and use the softmax function to output probabilities\footnote{We say that these probabilities are uncalibrated: until we calibrate them, they do not represent actual probabilities, they are only monotonically ordered from more to less likely.} of the input belonging to one of the $n$ classes of our classification problem. Formally, the softmax function is defined as such:
 
 \begin{equation}
     \text{softmax}(\boldsymbol{z})_i= \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}} \  \text{for } i = 1, ..., n
 \end{equation}
+
+\subsection{Gradient-based optimization}
+After seeing a handful of activation functions that allow our networks to work and to produce outputs, we can now focus on another very important piece of the puzzle: the optimizer.
+
+As we saw before, each neural layer transforms its input by applying a function as follows:
+
+\begin{equation*}
+    output = f(w_1 x_1 + ... + w_n x_n + b)
+\end{equation*}
+
+The learning is based on the gradual adjustment of the weights based on a feedback signal (typically the \textbf{loss function}, also called \textbf{cost function} or \textbf{error function}) and can be summed up in the following steps:
+
+\begin{enumerate}
+    \item Draw a batch of training examples $\boldsymbol{x}$ and their corresponding targets $\boldsymbol{y}_{target}$.
+    \item Run the network on $\boldsymbol{x}$ (forward pass) to obtain the predictions $\boldsymbol{y}_{pred}$.
+    \item Compute the loss of the network on the batch (a measure of the mismatch between $\boldsymbol{y}_{pred}$ and $\boldsymbol{y}_{target}$).
+    \item Update all the weights of the network in a way that it reduces the loss of this batch. By working in terms of batches, we avoid overfitting to a single example. 
+\end{enumerate}
+
+Given a differentiable function, the last step can be performed by means of \textbf{gradient descent} as shown in figure \ref{fig:ch6-gradientdescent}, even analytically if the number of weights is particularly small.
+
+\begin{figure}[hb]
+    \centering
+    \includegraphics[scale=0.15]{Images/Chapter 6/gradient-descent.png}
+    \caption{Gradient descent in a 3-dimensional space.}
+    \source{Ayoosh Kathuria on PaperSpace}
+    \label{fig:ch6-gradientdescent}
+\end{figure}
+
+This, however, is almost never the case, making it necessary to use approximate methods. Gradient descent methods follow the blueprint just presented, and update the weights by moving the parameters in the opposite direction of the gradient as follows:
+
+\begin{enumerate}
+    \item Draw a batch of training examples $\boldsymbol{x}$ and their corresponding targets $\boldsymbol{y}_{target}$.
+    \item Run the network on $\boldsymbol{x}$ (forward pass) to obtain the predictions $\boldsymbol{y}_{pred}$.
+    \item Compute the loss of the network on the batch (a measure of the mismatch between $\boldsymbol{y}_{pred}$ and $\boldsymbol{y}_{target}$).
+    \item Compute the gradient of the loss function with regards to the network’s parameters (backward pass). \item Move the parameters in the opposite direction of the gradient with:
+    
+        \begin{itemize}
+            \item $w_j \leftarrow w_j + \Delta w_j = w_j - \eta \frac{\partial J}{\partial w_j}$ for a single piece of data at a time.
+            \item $w_j \leftarrow w_j + \Delta w_j = w_j - \eta\ \text{average} \left( \frac{\partial J}{\partial w_j} \right)$ for batches of $k$ samples.
+        \end{itemize}
+        
+        Where $J$ is the loss function.
+\end{enumerate}
+
+If the input is drawn randomly from the available data, we refer to this as \textbf{Stochastic Gradient Descent}. If we use batches of data selected randomly, we call it \textbf{(mini)-batch Stochastic Gradient Descent}. It is also important to note that this is a simplified model, where we assume only one layer (and thus only one loss function): if this was not the case, we would have to calculate the gradients of all the loss functions and apply the weight correction to all the layers. A more realistic visualization of the ``landscape'' that we have to traverse during gradient descent is shown in figure \ref{fig:ch6-losslandscape}.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.15]{Images/Chapter 6/landscape.png}
+    \caption{The loss landscape of a neural network.}
+    \source{University of Maryland}
+    \label{fig:ch6-losslandscape}
+\end{figure}
+
+\subsection{The backpropagation algorithm}
+Now that we have seen how to perform weight optimization, we briefly introduce the \textbf{backpropagation algorithm}, a method through which we can apply this correction.
+
+Let us imagine we have a network with $L$ layers, each with a set of weights represented by the vector $\boldsymbol{W}^l$, with $l$ being the layer we are considering. The network output will be then given by:
+
+\begin{equation}
+    \boldsymbol{y}_{pred} = f^L \Bigg(\boldsymbol{W}^L \Big(f^{L-1} \big(\boldsymbol{W}^{L-1} ... f^1 \left(\boldsymbol{W}^1 \boldsymbol{x}\right) ...\big)\Big)\Bigg)
+    \label{eq:ch6-nnoutput}
+\end{equation}
+
+To perform the update, we can apply the chain rule (shown here) to calculate the derivative of the composite function represented by our network as such:
+
+\begin{equation*}
+    \frac{d}{dx} \Big[ f \big( g(x) \big) \Big] = f' \big( g(x) \big) g' (x)
+\end{equation*}
+
+It is called backpropagation algorithm because it starts by calculating the gradient of the final loss value and works backwards from the right-most layers to the left-most ones, applying the chain rule to compute the contribution that each weight had in the loss value.
