@@ -20,7 +20,8 @@ Immediately on transition to $S_{t+1}$ and receiving $R_{t+1}$. In effect, the t
 An implementation of the TD(0) algorithm is shown in the box below:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \KwIn{the policy $\pi$ to be evaluated}
 \Parameters{step size $\alpha \in \left] 0,1 \right]$}
 \Initialize{
@@ -68,7 +69,8 @@ This update is done after every transition from a nonterminal state $S_t$. If $S
 It is straightforward to design an on-policy control algorithm based on the SARSA prediction method. As in all on-policy methods, we continually estimate $q_\pi$ for the behavior policy $\pi$, and at the same time change $\pi$ towards greediness with respect to $q_\pi$. The \textbf{SARSA (on-policy TD control) algorithm for estimating $\boldsymbol{Q}$ values} is presented in the box below:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \Parameters{step size $\alpha \in \left] 0,1 \right]$, small $\varepsilon > 0$}
 \Initialize{
     \\
@@ -100,7 +102,8 @@ On-policy methods like SARSA are not the only ones available to tackle the contr
 As we can see, the update formula does not consider the action $A_{t+1}$ that we chose at time $t+1$, but a (possibly) different one: $a$, the one that has the highest $Q$ value. In this case, the \textbf{learned action-value function $\boldsymbol{Q}$ directly approximates the optimal action-value function $\boldsymbol{q_*}$ independent of the policy being followed}. The policy still has an effect in that it determines which state-action pairs are visited and updated; however, all that is required for correct convergence is that all pairs continue to be updated. Under this assumption and a variant of the usual stochastic approximation conditions on the sequence of step-size parameters, $Q$ has been shown to converge with probability 1 to $q_*$. More information can be found in \cite{Watkins1992}, while an implementation is shown in the box below:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \Parameters{step size $\alpha \in \left] 0,1 \right]$, small $\varepsilon > 0$}
 \Initialize{
     \\

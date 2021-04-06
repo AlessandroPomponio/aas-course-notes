@@ -21,7 +21,8 @@ More formally: we want to estimate $v_\pi (s)$, the value of a state $s$ under p
 The algorithm for the \textit{first-visit Monte Carlo Prediction} is shown here:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \KwIn{a policy $\pi$ to be evaluated}
 \Initialize{
     \\
@@ -84,7 +85,8 @@ Policy improvement can then be done by constructing each $\pi_{k+1}$ as the gree
 Since we need to guarantee that all actions are selected ``infinitely often'', in some cases we can do so by means of \textbf{exploring starts}. A possible implementation of the \textbf{Monte Carlo Control algorithm with Exploring Starts} is shown in the box below:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \Initialize{
     \\
     \Indp % add indent
@@ -121,7 +123,8 @@ Contrarily to what we did under the assumption of exploring starts, we cannot si
 The \textbf{on-policy first-visit Monte Carlo control (for $\boldsymbol{\varepsilon}$-soft policies) algorithm} is presented in the box below:
 
 \begin{algorithm}[H]
-\SetAlgoLined
+\DontPrintSemicolon
+\SetAlgoVlined
 \Parameters{small $\varepsilon > 0$}
 \Initialize{
     \\
