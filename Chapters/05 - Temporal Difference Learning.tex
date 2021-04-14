@@ -1,7 +1,7 @@
 \chapter{Temporal Difference Learning}
 Monte Carlo methods introduced us to ways of learning from raw experience without a model of the environment’s dynamics, iteratively generating episodes and analyzing their returns once they have been played out. Temporal Difference methods behave similarly, but overcome the limit of having to wait for the whole episode to end, enabling step-by-step learning. Let us analyze this in a bit more detail by first focusing on the \textit{prediction problem}.
 
-Following the structure \eqref{eq:ch3-generalrlupdaterule} we saw in chapter 3, we can schematize a simple every-visit Monte Carlo method suitable for nonstationary environment as:
+Following the structure \eqref{eq:ch3-generalrlupdaterule} we saw in \autoref{section:incrementalimplementation}, we can schematize a simple every-visit Monte Carlo method suitable for nonstationary environment as:
 
 \begin{equation*}
     V(S_t) \leftarrow V(S_t) + \alpha \left[ G_t - V(S_t) \right]

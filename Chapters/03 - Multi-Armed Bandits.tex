@@ -53,6 +53,7 @@ When it comes to selecting actions, the simplest action selection rule is to sel
 Where $\argmax_a$ denotes the action $a$ for which the expression that follows is maximized (with ties broken arbitrarily). The greedy action selection always exploits the current knowledge to maximize the immediate reward, disregarding exploration. To include it, we can add a small probability $\varepsilon$ where the next action is selected randomly from all the actions with equal probability. This is called the \textbf{$\boldsymbol{\varepsilon}$-greedy selection rule} and it has the advantage that in the limit, as the number of steps increases, every action will be sampled an infinite number of times, ensuring that all the $Q_t(a)$ converge to their respective $q_*(a)$ (these, however, are just asymptotic guarantees and say little about the practical effectiveness of these methods).
 
 \section{Incremental implementation}
+\label{section:incrementalimplementation}
 We now move to the question of how the methods that we have seen before can be computed in a computationally efficient manner, with constant memory and constant per-time-step computation.
 
 To simplify the notation, we will concentrate on a single action $a$. Let $R_i(a)$ denote the reward received after the $i$-th selection of the action $a$, and let $Q_n$ denote the estimate of its action value after it has been selected $n-1$ times. We can now write:
