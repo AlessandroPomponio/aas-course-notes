@@ -11,7 +11,8 @@
 \usepackage{bbm}                        % numbers with mathbb
 \usepackage{bm}                         % bold math symbols
 \usepackage{caption}                    % captions and source
-\usepackage{subfigure}                 % for side by side figures
+\usepackage{subfigure}                  % for side by side figures
+\usepackage{tocbibind}                  %for list of algorithms
 \usepackage[
     backend=biber,
     style=alphabetic,
@@ -19,7 +20,7 @@
 ]{biblatex}
 
 % Algorithms
-\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[ruled,vlined,dotocloa]{algorithm2e}
 \SetKwInput{Initialize}{Initialize} % Define the Initialize keyword
 \SetKwFor{Loop}{Loop}{:}{} % Define the Loop block
 \SetKwIF{Unless}{ElseUnless}{Else}{Unless}{:}{Else unless}{Else}{} % Define the Unless statement
@@ -86,6 +87,11 @@ The latest version of these notes can be found in my GitHub repository here: \ur
 
 % Table of contents
 \tableofcontents
+\clearpage
+\addemptypage
+
+% List of algorithms
+\listofalgorithms
 \clearpage
 \addemptypage
 
