@@ -102,7 +102,7 @@ Policy improvement is then done by changing the estimation policy to a soft appr
 The same thought process can be applied to obtain \textbf{semi-gradient Q-learning}, in which the update rule will be:
 
 \begin{equation}
-    \boldsymbol{w}_{t+1} = \boldsymbol{w}_t + \eta \big[ R_{t+1} + \gamma \argmax_a  \hat{q}(S_{t+1},A_{t+1},\boldsymbol{w}_t) - \hat{q}(S_t,A_t,\boldsymbol{w}_t) \big] \nabla \hat{q}(S_t,A_t,\boldsymbol{w}_t)
+    \boldsymbol{w}_{t+1} = \boldsymbol{w}_t + \eta \big[ R_{t+1} + \gamma \argmax_a  \hat{q}(S_{t+1},a,\boldsymbol{w}_t) - \hat{q}(S_t,A_t,\boldsymbol{w}_t) \big] \nabla \hat{q}(S_t,A_t,\boldsymbol{w}_t)
     \label{eq:ch7-qlearningqvaluefunctionapproxssdweightupdate}
 \end{equation}
 
