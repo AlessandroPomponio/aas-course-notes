@@ -115,12 +115,12 @@ With this rule, each increment is proportional to the product of a return $G_t$ 
 If we then apply the identity $\nabla \ln{x} = \frac{\nabla x}{x}$, we obtain the final formulas:
 
 \begin{equation}
-    \nabla J(\boldsymbol{\theta}) \propto \mathbb{E}_\pi \Big[ G_t \ln{\nabla \pi (a \vert S_t, \boldsymbol{\theta})} \Big]
+    \nabla J(\boldsymbol{\theta}) \propto \mathbb{E}_\pi \Big[ G_t \nabla \ln{\pi (a \vert S_t, \boldsymbol{\theta})} \Big]
     \label{eq:ch8-finalreinforcepolicygradient}
 \end{equation}
 
 \begin{equation}
-    \boldsymbol{\theta}_{t+1} \doteq \boldsymbol{\theta}_{t} + \alpha G_t \ln{\nabla \pi (a \vert S_t, \boldsymbol{\theta})}
+    \boldsymbol{\theta}_{t+1} \doteq \boldsymbol{\theta}_{t} + \alpha G_t \nabla \ln{\pi (a \vert S_t, \boldsymbol{\theta})}
     \label{eq:ch8-finalreinforceupdaterule}
 \end{equation}
 
