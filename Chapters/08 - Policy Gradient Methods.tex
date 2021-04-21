@@ -153,7 +153,7 @@ To have a better idea of how this is could be put into practice in a neural netw
     \label{fig:ch8-reinforcepolicynetwork}
 \end{figure}
 
-\section{Stochastic Gradient Ascent}
+\subsection{Stochastic Gradient Ascent}
 What we have seen in picture \ref{fig:ch8-reinforcepolicynetwork} works, except for one not-so-minor detail: neural networks (and the backpropagation algorithm) work by minimizing the loss function, performing stochastic gradient \textit{descent}, which is the opposite of what we want to do (an explanation of how stochastic gradient descent works can be found in \autoref{subsection:gradient-based-optimization}).
 
 A simple --but effective-- trick to have neural networks perform stochastic gradient \textit{ascent} is then to have a new function $J' (\boldsymbol{\theta})$ that is the opposite of $J(\boldsymbol{\theta})$. Formally, we will have:
@@ -162,3 +162,119 @@ A simple --but effective-- trick to have neural networks perform stochastic grad
     \item $J' (\boldsymbol{\theta}) = -(G_t \ln{\pi} - 0) = -G_t \ln{\pi}$
     \item $\nabla J' (\boldsymbol{\theta}) = -G_t \nabla \ln{\pi}$
 \end{itemize}
+
+\subsection{How well does REINFORCE perform?}
+As a stochastic gradient method, REINFORCE has good theoretical convergence properties: by construction, the expected update over an episode is in the same direction as the performance gradient. This assures an improvement in expected performance for sufficiently small $\alpha$, and convergence to a local optimum under standard stochastic approximation conditions for decreasing $\alpha$. However, being a Monte Carlo method, REINFORCE suffers from high variance due to the empirical returns, causing a slow learning process. To deal with this problem, we can use \textbf{baselines} or \textbf{actor-critic} methods.
+
+\section{REINFORCE with Baseline}
+To overcome the issue of high variance in Monte Carlo updates, we can generalize the \textit{policy gradient theorem} (equation \ref{eq:ch8-policygradienttheorem}) by including a comparison of the action value to an arbitrary \textbf{baseline} $b(s)$:
+
+\begin{equation}
+    \nabla J(\boldsymbol{\theta}) \propto \sum_s \mu(s) \sum_a \big(q_\pi(s,a) - b(s) \big) \nabla\pi(a \vert s, \boldsymbol{\theta})
+    \label{eq:ch8-policygradienttheoremwithbaseline}
+\end{equation}
+
+The baseline will act as a \textit{smoothing factor} by limiting the magnitude of the updates. We can choose any function, even a random variable, to use as a baseline, as long as it does not vary with $a$. This detail allows the equation to remain valid and unbiased, as the quantity that we subtracted is zero, as proven here:
+
+\begin{equation}
+    \begin{split}
+        & \sum_a b(s) \nabla\pi (a \vert s,\boldsymbol{\theta}) \\
+        &= b(s) \sum_a \nabla\pi (a \vert s,\boldsymbol{\theta}) \quad \text{since } b(s) \text{ does not depend on } a\\
+        &= b(s) \nabla \sum_a \pi (a \vert s,\boldsymbol{\theta}) \quad \text{since the sum of gradients is the gradient of the sum}\\
+        &= b(s) \nabla 1 \quad \text{since the sum of probabilities is 1} \\
+        &= 0
+    \end{split}
+    \label{eq:ch8-policygradientwithbaselineunbiasedproof}
+\end{equation}
+
+The \textbf{policy gradient theorem with baseline} can then be used to derive the REINFORCE with baseline update rule using similar steps as the ones we used in \ref{eq:ch8-stateandactionsampledpolicygradient}:
+
+\begin{equation}
+    \begin{split}
+        \boldsymbol{\theta}_{t+1} &\doteq \boldsymbol{\theta}_t + \alpha \big(G_t - b(S_t) \big) \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
+        &= \boldsymbol{\theta}_t + \alpha \big( G_t - b(S_t) \big) \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta})}
+    \end{split}
+    \label{eq:ch8-reinforcewithbaselineupdaterule}
+\end{equation}
+
+In order to achieve the best convergence speed, it is important to choose the baseline appropriately for each state: in some states all actions have high values, and we need a high baseline to differentiate the higher valued actions from the less highly valued ones; in other states all actions will have low values and a low baseline is appropriate. A natural choice for the baseline will then be an estimate of the state value,  $\hat{v}(S_t,\boldsymbol{w})$, where $\boldsymbol{w} \in \mathbb{R}^d$ is a weight vector learned using --for example-- another deep neural network.
+
+A pseudocode algorithm for \textbf{REINFORCE with baseline} is given in the box below:
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\SetAlgoVlined
+\KwIn{a differentiable policy parametrization $\pi(a \vert s, \boldsymbol{\theta})$ \newline
+      a differentiable state-value function parametrization $\hat{v}(s,\boldsymbol{w})$}
+\Parameters{step sizes $\alpha^{\boldsymbol{\theta}} > 0$, $\alpha^{\boldsymbol{w}} > 0$}
+\Initialize{policy parameter $\boldsymbol{\theta} \in \mathbb{R}^{d'}$ and state-value weights $\boldsymbol{w} \in \mathbb{R}^{d}$ (e.g., to $\boldsymbol{0}$)}
+
+ \Loop{for each episode}{
+    Generate an episode $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$, following $\pi(\cdot \vert \cdot, \boldsymbol{\theta})$\;
+    \Loop{for each step of the episode $t = 0, 1, ..., T-1$}{
+        $G \leftarrow \sum_{k = t+1}^{T} R_k$\;
+        $\delta \leftarrow G - \hat{v}(S_t,\boldsymbol{w})$\;
+        $\boldsymbol{w} \leftarrow \boldsymbol{w} + \alpha^{\boldsymbol{w}} \delta \nabla \hat{v}(S_t,\boldsymbol{w})$\;
+        $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} + \alpha^{\boldsymbol{\theta}} \delta \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta})}$
+    }
+ }
+\caption{REINFORCE with Baseline (episodic), for estimating $\pi_{\boldsymbol{\theta}} \approx \pi_*$}
+\end{algorithm}
+
+\section{Actor-Critic methods}
+After seeing \textit{REINFORCE with baseline}, we introduce \textbf{actor-critic methods}, named after their two components:
+
+\begin{itemize}
+    \item The \textbf{actor}: a parameterized policy that defines how actions are selected (how we act).
+    \item The \textbf{critic}: a learned value function that evaluates each action the agent takes in the environment.
+\end{itemize}
+
+At this point we may be wondering whether REINFORCE with baseline is considered an actor-critic method or not, given that it learns both a policy and a state-value function. This is not the case: the key characteristic of actor-critic methods, in fact, is that the state-value function is used to \textbf{bootstrap}\footnote{In reinforcement learning, bootstrapping means updating a value based on estimates of the value at subsequent time steps.}, performing updates at each step, in an online fashion.
+
+Let us rephrase this by considering a transition from a state $S_t$ to another state $S_{t+1}$. In REINFORCE with baseline, the learned state-value function estimates the value of \textit{only the first state of each transition}. The estimate we see in the update, $\hat{v}(S_t,\boldsymbol{w})$, sets a baseline for the subsequent return $G_t$, but since it is only based on the state that precedes the transition, it cannot be used to assess the action we took. As we will see, instead, in actor-critic methods the state-value function \textit{is also applied to the second state of the transition}, allowing the critic to give the actor a feedback at each step (we will consider \textbf{one-step actor-critic methods}).
+
+Intuitively, knowing immediately whether our actions are good or not allows us to be more effective, enabling quick corrections that could prevent us from going completely off track. As an example, imagine we are writing our dissertation: if we submit it to the supervisor on a chapter-by-chapter basis, we might learn to adapt quickly to the required style, performing only relatively minor corrections. If, on the other hand, we just submit it once it is complete, we might not only have to apply major corrections, but each iteration will also take longer.
+
+\subsection{One-step actor-critic}
+Given what we just said, it does not come as a surprise that one-step actor-critic methods replace the full return $G_t$ of REINFORCE with the one-step return $G_{t:t+1}$ (and use a learned state-value function as baseline) as follows\footnote{$G_{t:t+n}$ is the $n$-step return from $t+1$ to $t+n$.}:
+
+\begin{equation}
+    \begin{split}
+        \boldsymbol{\theta}_{t+1} &\doteq \boldsymbol{\theta}_t + \alpha \big(G_{t:t+1} - \hat{v}(S_t,\boldsymbol{w}) \big) \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
+        &= \boldsymbol{\theta}_t + \alpha \big(R_{t+1} + \hat{v}(S_{t+1},\boldsymbol{w}) - \hat{v}(S_t,\boldsymbol{w}) \big) \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
+        &= \boldsymbol{\theta}_t + \alpha \delta_t \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
+        &= \boldsymbol{\theta}_t + \alpha \delta_t \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta}}
+    \end{split}
+    \label{eq:ch8-onestepactorcriticupdaterule}
+\end{equation}
+
+By bootstrapping, \textit{one-step actor-critic methods} become \textbf{biased}, as their estimates depend on values at successive time steps. This is not necessarily a bad thing, as in this case it reduces variance and accelerates learning.
+
+It is also important to note that the weights of both the actor and the critic network will be learnt independently, but at the same time.
+
+A pseudocode implementation of one-step actor-critic is shown here:
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\SetAlgoVlined
+\KwIn{a differentiable policy parametrization $\pi(a \vert s, \boldsymbol{\theta})$ \newline
+      a differentiable state-value function parametrization $\hat{v}(s,\boldsymbol{w})$}
+\Parameters{step sizes $\alpha^{\boldsymbol{\theta}} > 0$, $\alpha^{\boldsymbol{w}} > 0$}
+\Initialize{policy parameter $\boldsymbol{\theta} \in \mathbb{R}^{d'}$ and state-value weights $\boldsymbol{w} \in \mathbb{R}^{d}$ (e.g., to $\boldsymbol{0}$)}
+
+ \Loop{for each episode}{
+    Initialize $S$ (first state of the episode)\;
+    \Loop{while $S$ is not terminal (for each time step)}{
+        Select $A$ using policy $\pi$\;
+        Take action $A$, observe $S',R$\;
+        $\delta \leftarrow R + \hat{v}(S',\boldsymbol{w}) - \hat{v}(S_t,\boldsymbol{w}) \quad$ (if $S'$ is terminal, then $\hat{v}(S',\boldsymbol{w}) \doteq 0$)\;
+        $\boldsymbol{w} \leftarrow \boldsymbol{w} + \alpha^{\boldsymbol{w}} \delta \nabla \hat{v}(S_t,\boldsymbol{w})$\;
+        $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} + \alpha^{\boldsymbol{\theta}} \delta \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta})}$\;
+        $S \leftarrow S'$
+    }
+ }
+\caption{One-step Actor-Critic (episodic), for estimating $\pi_{\boldsymbol{\theta}} \approx \pi_*$}
+\end{algorithm}
+
+\section{Continuous action space}
+Policy-based methods offer practical ways of dealing with large action spaces, even continuous ones, with an infinite number of actions. In those cases, instead of computing learned probabilities for each of the many actions, we learn statistics of the probability distribution, like the \textit{mean} and the \textit{variance} of a Gaussian distribution. Actions will then be sampled from the learned distributions.
