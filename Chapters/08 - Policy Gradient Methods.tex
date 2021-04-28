@@ -1,4 +1,5 @@
 \chapter{Policy Gradient Methods}
+\label{ch:policygradientmethods}
 Until now we have discussed so-called \textbf{action-value methods}, in which we learn the action values and use a policy (e.g., $\varepsilon$-greedy) to select actions based on those estimates. A possible alternative would be to have a different set of methods that could learn a \textbf{parametrized policy that allowed them to select actions without consulting a value function} (a value function might be used to learn the policy parameter, but it is not required for action selection; we will keep using the $\boldsymbol{w} \in \mathbb{R}^d$ notation for the weight vector of the value function).
 
 For \textbf{policy networks} we will use $\boldsymbol{\theta}$ to indicate the \textbf{policy’s parameter vector}, with $\boldsymbol{\theta} \in \mathbb{R}^{d'}$. The probability of taking an action $a$ at time $t$, given that the environment is in state $s$ at time $t$ with parameter $\boldsymbol{\theta}$, will then be:
