@@ -47,7 +47,7 @@ We can note that the quantity in the square brackets of the TD(0) update is a so
     \label{eq:ch5-tderrordeltat}
 \end{equation}
 
-Since $\delta_t$ depends on the next state and the next reward, the TD error at time $t$ will only be available at time $t+1$.
+Note that $\delta_t$ depends on the value of the next state. Since $v_{\pi}(S_{t+1})$ is not known at time $t$, we use the current estimate $V(S_{t+1})$ instead. Updating estimates of the values of states based on estimates of the values of successor states is called \textbf{bootstrapping}.
 
 \section{Advantages and theoretical bases of TD methods}
 Given what we have seen, we can already understand that Temporal Difference methods have advantages over both methods that require a model of the environment (such as Dynamic Programming) and Monte Carlo methods, as they cannot be applied in an online, fully incremental fashion like TD. This is often crucial because we may not have a complete model of the environment or the tasks that we are studying might not be divisible into episodes (such as the case of continuing tasks).
