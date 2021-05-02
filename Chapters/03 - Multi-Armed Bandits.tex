@@ -6,7 +6,7 @@ To do so, we introduce the \textbf{$\boldsymbol{k}$-armed bandit problem} (a slo
 
 As a note, there is a different version of the $k$-armed bandit problem, known as \textbf{contextual bandits}, in which we do consider the state but assume that it does not depend on previous actions. This problem is at the basis of ad-serving platforms.
 
-Let us now see things from a more formal point of view: in our $k$-armed bandit problem, each of the $k$ actions has an expected or mean reward given that that action is selected; let us call this the \textit{value} of that action. We denote the action selected on time step $t$ as $A_t$, and the corresponding reward as $R_t$. Our goal is then to maximize the following:
+Let us now see things from a more formal point of view: in our $k$-armed bandit problem, each of the $k$ actions has an expected (or mean) reward given that that action is selected; let us call this the \textit{value} of that action. We denote the action selected on time step $t$ as $A_t$, and the corresponding reward as $R_t$. Our goal is then to maximize the following:
 
 \begin{gather*}
     \mathbb{E} \left[ G_t \  \middle\vert \  S_t = s, A_t = a \right] \doteq \mathbb{E} \left[ R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... \  \middle\vert \  S_t = s, A_t = a \right] \\

@@ -109,7 +109,7 @@ This means that, given a state and the value function, the optimal policy is the
 For the state-action pair $(s,a)$, this function gives the expected return for taking the action $a$ in the state $s$ and thereafter following an optimal policy. Thus, we can write $q_*$ in terms of $v_*$ as follows:
 
 \begin{equation*}
-    q_*(s,a) = \mathbb{E} \left[ R_{t+1} + \gamma v_* S_{t+1} \  \middle\vert \ S_t = s, A_t = a \right]
+    q_*(s,a) = \mathbb{E}_{\pi} \left[ R_{t+1} + \gamma v_* S_{t+1} \  \middle\vert \ S_t = s, A_t = a \right]
 \end{equation*}
 
 \section{Optimality and approximation}
@@ -135,7 +135,7 @@ We can re-write the Bellman equation under the optimal policy, obtaining what is
 
 \begin{equation}
     \begin{split}
-        q_*(s,a) & = \mathbb{E} \left[ R_{t+1} + \gamma \max_{a'} q_* (S_{t+1}, a') \ \middle\vert \ S_t = s, A_t = a \right] \\
+        q_*(s,a) & = \mathbb{E}_{\pi} \left[ R_{t+1} + \gamma \max_{a'} q_* (S_{t+1}, a') \ \middle\vert \ S_t = s, A_t = a \right] \\
         & = \sum_{s', r} p(s',r \ \vert \ s,a) \left[ r + \gamma \max_{a'} q_*(s',a') \right]
     \end{split}
     \label{eq:ch2-bellmanoptimalityequation}
@@ -143,7 +143,7 @@ We can re-write the Bellman equation under the optimal policy, obtaining what is
 
 Intuitively, the Bellman optimality equation must equal the expected return for the best action from that state. 
 
-The Bellman optimality equation is actually a system of equations, one for each state, so if there are $n$ states, then there are $n$ equations in $n$ unknowns. If the dynamics $p$ of the environments are known, then in principle one can solve this system of equation for $v_*$. Once we have $v_*$ (or $q_*$), the actions that select the highest value for them in each state will then be the optimal actions. Another way of saying this is that any policy that is \textbf{greedy} with respect to the optimal evaluation function is an optimal policy. As a reminder, the term \textit{greedy} is used in computer science to describe any search or decision procedure that selects alternatives based only on local or immediate considerations, without considering the possibility that such a selection may prevent future access to even better alternatives. This is not an issue in the case of Markov Decision processes, though, as they indeed depend only on the current state: \textbf{a greedy policy is then optimal both in the short and in the long-term}.
+The Bellman optimality equation is actually a system of equations, one for each state, so if there are $n$ states, then there are $n$ equations in $n$ unknowns. If the dynamics $p$ of the environments are known, then in principle one can solve this system of equation for $v_*$. Once we have $v_*$ (or $q_*$), the actions that select the highest value for them in each state will then be the optimal actions. Another way of saying this is that any policy that is \textbf{greedy} with respect to the optimal evaluation function is an optimal policy. As a reminder, the term \textit{greedy} is used in computer science to describe any search or decision procedure that selects alternatives based only on local or immediate considerations, without considering the possibility that such a selection may prevent future access to even better alternatives. This is not an issue in the case of Markov Decision Processes, though, as they indeed depend only on the current state: \textbf{a greedy policy is then optimal both in the short and in the long-term}.
 
 As we were hinting at earlier, it may not always be possible to solve the Bellman optimality equations, both due to the huge number of states (and equations) involved in non-trivial problems and because the state may not be fully observable, or we may not be able to know its dynamics.
 
