@@ -132,3 +132,17 @@ At each generation, the fitness of each individual is evaluated, and the populat
 
 \subsection{Coevolution}
 Coevolution is an extension of evolutionary algorithms for domains with multiple agents. By using evolutionary algorithms, we can train a policy to perform a state-to-action mapping. In this approach, rather than update the parameters of a single agent interacting with the environment as it is done in reinforcement learning, one searches through a population of policies that have the highest fit for the task at hand.
+
+\section{Swarm Intelligence}
+One of the most famous techniques in bio-inspired machine learning methods is \textbf{swarm intelligence}. It is based on the behavior of social insects (like ants) and it attempts to develop self-organized and decentralized adaptive algorithms.
+
+Swarm intelligence systems consist typically of a large population of simple agents interacting locally with one another and with their environment. The agents follow very simple rules, and although there is no centralized control structure dictating how individual agents should behave, local --and to a certain degree random-- interactions between such agents lead to the emergence of ``intelligent'' global behavior, unknown to the individual agents\footnote{Adapted from \url{https://en.wikipedia.org/wiki/Swarm_intelligence}}.
+
+Earlier, when we talked about \textit{online RL towards social welfare}, we assumed that the agents had access to a shared utility function. This, however, is not the case for real systems: we need to communicate in some way to achieve coordination. 
+
+A possible way of achieving communication is by modifying the environment, with a process known as \textbf{stigmergy}. Ants, for example, leave chemical trails behind to trace their paths: this allows them not only to find their way back towards the nest, but also to find the shortest path to do so. The strength of these chemical trails, in fact, decays over time and, since shorter paths allow for a higher number of passages, pheromone levels will be higher on them and they will be chosen more often. This process is mimicked in the \textit{Ant Colony Optimization} algorithm, used to find the shortest path in a network, typically on problems that can be described by means of the \textit{Traveling Salesman Problem}.
+
+\section{Adaptive Mechanism Design}
+It is also possible to think of a multi-agent learning setting in which the agents are fixed (or not controllable by us), but the interaction mechanism is to be learned.
+
+To understand this better, let us imagine we are running an auction house: we can control parameters such as the minimum price of the auctioned items, whether to allow simultaneous actions or not and the format of the auction (English auction, Vickrey auction, Dutch auction, etc.). The auction house, of course, is only able to control the rules of interaction between the bidders, and not the bidders themselves. Nonetheless, by learning the way the (auctioning) mechanism work, the auction house can refine the auction parameters over time in order to maximize the price of the items.
