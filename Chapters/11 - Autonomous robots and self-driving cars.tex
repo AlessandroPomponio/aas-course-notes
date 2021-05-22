@@ -1,0 +1,30 @@
+\chapter{Autonomous robots and self-driving cars}
+As we have seen in the first chapter, the term ``autonomous and adaptive systems'' is not limited to only software agents --like the ones that we have considered so far-- but it also encompasses physically situated \textbf{robots}.
+
+After seeing some examples of unmanned robots (see slides 4-9 of the ``Autonomous Robots and Self-driving Cars'' slide deck), we ask two questions:
+
+\begin{itemize}
+    \item What is the difference between \textbf{automation} and \textbf{autonomy}?
+    \item Why does it matter that there is a difference between autonomy and automation?
+\end{itemize}
+
+In first approximation we can say that \textit{automation} is about robots as tools, while \textit{autonomy} is about robots as agents. As it often happens, the line between the two is actually much more blurred. We present the following questions to help us discern between automation and autonomy:
+
+\begin{itemize}
+    \item Does the system focus on \textbf{executing} plans or on \textbf{generating} them?
+    \item Does the system use a \textbf{closed} or an \textbf{open-world model}?
+    \item Does the system use \textbf{deterministic} or \textbf{non-deterministic algorithms}?
+    \item Does the system manipulate \textbf{signals} or \textbf{symbols/concepts}?
+\end{itemize}
+
+In many situations knowing the difference between the two terms is not enough, and we must choose which type of system to develop to best suit our needs. Automatic systems follow a deterministic behavior, making them predictable and, most importantly, testable. This may be sufficient for our use case, but in some instances we might want a certain degree of adaptability, through which the robot can autonomously handle unexpected changes without stopping. This degree of freedom must be kept in mind, and attention must be paid to the consequences of potential failures, both in terms of risks and liability for the damages that might be caused.
+
+\section{World models}
+Robots need to have a representation of the state around them, called a \textbf{world model}, to keep track of everything that is needed for their computation. The model may be pre-programmed and hard coded into the robot, or it may be learnt by the robot itself. It will not only include rules, constraints, and maps, but also beliefs and intentions.
+
+If we work under the assumption that we know everything that might happen in our world, we are dealing with a \textbf{closed-world model} (e.g., any predicate that is not in our database is considered as false), in which we can specify in its entirety the list of possible states, objects and conditions. If this is not the case, we are working under an \textbf{open-world} hypothesis.
+
+Closely related to these assumptions, we have the \textbf{frame problem}: how do we correctly identify the things that do not change over time in our world (e.g., walls, trees, etc.) to reduce computation? This is very important as it is linked to the concept of \textbf{bounded rationality}, originally introduced by Herbert Simon, stating that the decision-making capabilities of all agents (whether they are human or artificial) is limited by how much information they have, their computational abilities and the amount of time they have available to make a decision. We must also remember that, while a robot may dynamically adapt or change its plan of action to overcome the occurrence of unexpected events, it cannot go beyond what it has been programmed or trained for.
+
+\section{Self-driving cars}
+For the part on self-driving cars, refer to the slides.
