@@ -20,15 +20,13 @@ still be able to some extent to predict his pupil’s behaviour''}.
 After seeing a few examples of autonomous systems, like self-driving cars and agents that play videogames, we understand that our goal is to be able to build machines that can learn from experience, trying things out on their own, without any human intervention. We first start by giving some definitions.
 
 \subsection{Intelligent agents}
-We define an \textbf{intelligent agent} as an entity that perceives its environment and takes actions that maximize the probability of achieving its goals. It is important to note that the agent does not know what set of actions will allow it to reach the goal, it just ``moves'' towards actions that maximize the probability of it happening. Agents may also be physically situated (we call them \textbf{robots}) or not (we refer to them as \textbf{software agents} or \textbf{bots}).
+We define an \textbf{intelligent agent} as an entity that perceives its environment and takes actions that maximize the probability of achieving its goals. It is important to note that the agent does not know what set of actions will allow it to reach the goal, it just ``moves'' towards actions that maximize the probability of it happening. We will refer to agents that are physically situated as \textbf{robots}, while we will call \textbf{software agents} or \textbf{bots} those that are not.
 
 \subsection{Adaptive agents}
 We define an \textbf{adaptive agent} as an entity that can respond to changes in its environment. This is possible thanks to a lack of determinism: the agent will adapt and react to the environment (which may also include other agents) and take different actions.
 
-Learning can take place in two ways: at the end of a generation, with \textbf{natural selection} and the survival of the fittest, or during a generation, with a method that is more similar to \textbf{reinforcement learning}.
-
 \subsection{Autonomous agents}
-We define an \textbf{autonomous agent} as an entity that only relies on its perception and acts in the world independently from its designer. A key characteristic of this type of agent is that they should be able to compensate for partial knowledge: in the beginning they may only know how to perceive the environment and how to take a certain set of actions; from a practical point of view, it makes sense to provide the agent with some knowledge of the world and the ability to learn. After sufficient experience of its environment, an intelligent agent can become effectively independent of its prior knowledge.
+We define an \textbf{autonomous agent} as an entity that only relies on its perception and acts in the world independently from its designer. A key characteristic of this type of agent is that they should be able to compensate for partial knowledge: in the beginning they may only know how to perceive the environment and how to take a certain set of actions without knowing their effect; from a practical point of view, it then makes sense to provide the agent with some knowledge of the world and the ability to learn. After sufficient experience of its environment, an intelligent agent can also become effectively independent of its prior knowledge.
 
 \subsection{Designing agents}
 When designing agents, we need to take into consideration the following dimensions:
@@ -63,10 +61,10 @@ The environment in which our agent is situated may be of different types:
 \begin{itemize}
     \item \textbf{Fully observable vs partially observable}: we may or may not be able to see the entire environment (e.g., there may be occlusions limiting our sight).
     \item \textbf{Deterministic vs stochastic}: the environment may be predictable (e.g., governed by the laws of Newtonian physics) or not (e.g., the environment may be subject to changes performed by another agent).
-    \item \textbf{Episodic vs sequential}: the environment may be divided in “episodes” that have a beginning and an end (e.g., the levels of a game) or open-ended (e.g., a self-driving car that keeps driving).
-    \item \textbf{Static vs dynamic}: the environment may or may not change over time (an action that we take now could have a different result compared to when we took it in the past, e.g., certain agents with whom we collaborated in the past, may not do so anymore; driving in dry conditions is different compared to driving in the rain or in the snow).
-    \item \textbf{Discrete vs continuous}: the environment may be discrete or continuous (e.g., the wind speed is a continuous attribute of the environment).
-    \item \textbf{Single agent or multi-agent}: there may be multiple agents in the environment, and we may want them to collaborate.
+    \item \textbf{Episodic vs sequential}: the environment may be divided in “episodes” that have a beginning and an end (e.g., the levels of a game) or open-ended (e.g., a self-driving car that keeps on driving).
+    \item \textbf{Static vs dynamic}: the environment may or may not change over time (an action that we take now could have a different result compared to when we took it in the past, e.g., certain agents with whom we collaborated in the past, may not do so anymore; driving in dry conditions is different compared to driving in the rain or in the snow; etc.).
+    \item \textbf{Discrete vs continuous}: the environment may be represented by means of discrete or continuous values (e.g., a switch can be ON or OFF; the wind speed might be 14.6 km/h from N/E; etc.).
+    \item \textbf{Single-agent or multi-agent}: there may be multiple agents in the environment, and we might want them to collaborate.
 \end{itemize}
 
 \section{A categorization of intelligent agents}
@@ -122,7 +120,7 @@ Goal-based agents (figure \ref{fig:ch1-goalbasedagent}) act in order to achieve 
 \end{figure}
 
 \subsection{(Model-based) Utility-based agents}
-Goals are not sufficient to generate “high-quality behavior” in most environments, since there are usually states that are preferrable to others. In order to code this “preference”, we use utility functions that map a state (or a sequence of states) to a real number (e.g., we want to get to a destination by following the shortest or quickest path). (See figure \ref{fig:ch1-utilitybasedagent})
+Goals are not sufficient to generate high-quality behavior in most environments, since there are usually states that are preferrable to others. In order to code this preference, we use utility functions that map a state (or a sequence of states) to a real number (e.g., we want to get to a destination by following the shortest or quickest path). (See figure \ref{fig:ch1-utilitybasedagent})
 
 Note that how to model these preferences is one of the current unsolved and “hot” topics in the artificial intelligence field.
 
@@ -137,4 +135,4 @@ Note that how to model these preferences is one of the current unsolved and “h
 To conclude this first introduction, let us quickly consider the topic of learning.
 
 \section{Learning}
-As we have said before, the behavior of the agents can be pre-programmed (hard-wired, fixed) or it can be learned by means of a learning component. This component can be based on a model of the world and the gain towards a certain goal (possibly expressed in terms of the change of the value of utility functions) can be expressed through rewards. This behavior is at the basis of the type of learning that we will explore in detail in this course, called \textbf{reinforcement learning}. Following Herbert Simon’s definition of autonomous and adaptive systems, we will consider \textit{``machines that think, that learn and that create''}.
+As we said before, the behavior of the agents can be pre-programmed (hard-wired, fixed) or it can be learned by means of a learning component. This component can be based on a model of the world and the gain towards a certain goal can be expressed through rewards. This behavior is at the basis of the type of learning that we will explore in detail in this course, called \textbf{reinforcement learning}. Following Herbert Simon’s definition of autonomous and adaptive systems, we will consider \textit{``machines that think, that learn and that create''}.
