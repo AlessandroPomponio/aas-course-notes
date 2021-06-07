@@ -98,7 +98,7 @@ Policy improvement is then done by changing the estimation policy to a soft appr
 \caption{Episodic Semi-gradient SARSA for estimating $\hat{q} \approx q_*$}
 \end{algorithm}
 
-\subsection{Semi-gradient off-policy Q-learning}
+\subsection{Semi-gradient Q-learning}
 The same thought process can be applied to obtain \textbf{semi-gradient Q-learning}, in which the update rule will be:
 
 \begin{equation}
@@ -108,7 +108,6 @@ The same thought process can be applied to obtain \textbf{semi-gradient Q-learni
 
 Where $\boldsymbol{w}_t$ is the vector of the network’s weights, $A_t$ is the action selected at time $t$, and $S_t$ and $S_{t+1}$ are the inputs to the network at their respective time steps.
 
-\section{Deep Q-Network}
 Semi-gradient Q-learning (or, interchangeably, \textbf{Deep Q-Network}, \textbf{DQN}) has been used to solve Atari games. It combines Q-Learning with a deep (convolutional) neural network, allowing, in this case, the conversion of the original frames from the 60Hz video feed ($210 \times 160$ pixels, 128 colors) in an $84 \times 84$ matrix of luminance values. Since movement is very important in videogames (e.g., what is the direction of the ball in a tennis match, what is its speed, etc.) and it cannot be necessarily inferred from a single frame, researchers decided to feed the network a stack of four frames at a time (making the input $84 \times 84 \times 4$). In addition to that, the rewards of the DQN have been restricted to be one of $\left\{-1,0,+1\right\}$. This has proven to yield better results (possibly) due to a reduction of instability (we learn more quickly if actions that are similar give us the same reward). More information on this can be found in \cite{mnih2013atari} and \cite{mnih2015humanlevel}. Let us now look at some key features of DQN.
 
 We are in the \textbf{control problem}: we want to learn the optimal way to play a game. This, of course, means that the more we learn, the greedier will our policy have to be: once we are confident in our policy, we will have to start playing at the best of our abilities. The value of both $\varepsilon$ and the decay will be part of our \textbf{hyperparameters} and we will have to find their best value experimentally. In the examples cited before, $\varepsilon$ was set to decrease linearly over the first million frames and the network was trained using a mini-batch stochastic gradient with batches of 32 images (each made up of 4 frames), with changes proportional to the running average of the squares of gradients (RMSprop).
