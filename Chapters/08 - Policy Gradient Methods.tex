@@ -244,7 +244,7 @@ Given what we just said, it does not come as a surprise that one-step actor-crit
         \boldsymbol{\theta}_{t+1} &\doteq \boldsymbol{\theta}_t + \alpha \big(G_{t:t+1} - \hat{v}(S_t,\boldsymbol{w}) \big) \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
         &= \boldsymbol{\theta}_t + \alpha \big(R_{t+1} + \hat{v}(S_{t+1},\boldsymbol{w}) - \hat{v}(S_t,\boldsymbol{w}) \big) \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
         &= \boldsymbol{\theta}_t + \alpha \delta_t \frac{\nabla \pi (A_t \vert S_t, \boldsymbol{\theta})}{\pi (A_t \vert S_t, \boldsymbol{\theta})} \\
-        &= \boldsymbol{\theta}_t + \alpha \delta_t \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta}}
+        &= \boldsymbol{\theta}_t + \alpha \delta_t \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta}})
     \end{split}
     \label{eq:ch8-onestepactorcriticupdaterule}
 \end{equation}
@@ -268,9 +268,9 @@ A pseudocode implementation of one-step actor-critic is shown here:
     \Loop{while $S$ is not terminal (for each time step)}{
         Select $A$ using policy $\pi$\;
         Take action $A$, observe $S',R$\;
-        $\delta \leftarrow R + \hat{v}(S',\boldsymbol{w}) - \hat{v}(S_t,\boldsymbol{w}) \quad$ (if $S'$ is terminal, then $\hat{v}(S',\boldsymbol{w}) \doteq 0$)\;
-        $\boldsymbol{w} \leftarrow \boldsymbol{w} + \alpha^{\boldsymbol{w}} \delta \nabla \hat{v}(S_t,\boldsymbol{w})$\;
-        $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} + \alpha^{\boldsymbol{\theta}} \delta \nabla \ln{\pi (A_t \vert S_t, \boldsymbol{\theta})}$\;
+        $\delta \leftarrow R + \hat{v}(S',\boldsymbol{w}) - \hat{v}(S,\boldsymbol{w}) \quad$ (if $S'$ is terminal, then $\hat{v}(S',\boldsymbol{w}) \doteq 0$)\;
+        $\boldsymbol{w} \leftarrow \boldsymbol{w} + \alpha^{\boldsymbol{w}} \delta \nabla \hat{v}(S,\boldsymbol{w})$\;
+        $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} + \alpha^{\boldsymbol{\theta}} \delta \nabla \ln{\pi (A \vert S, \boldsymbol{\theta})}$\;
         $S \leftarrow S'$
     }
  }
