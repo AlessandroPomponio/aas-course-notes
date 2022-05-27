@@ -133,7 +133,7 @@ Choosing a wildly optimistic initial value encourages action-value methods to ex
 Exploration is needed because there is always uncertainty about the accuracy of the action-value estimates. $\varepsilon$-greedy action selection forces non-greedy (exploratory) actions to be tried, but indiscriminately, with no preference for those that are nearly greedy or particularly uncertain. It would be better to select among the non-greedy actions according to their potential for actually being optimal, taking into account both how close their estimates are to being maximal and the uncertainties in those estimates. One effective way of doing this is to select actions according to the following formula:
 
 \begin{equation}
-    A_t \doteq \argmax_a \Bigg[ Q_t (a) + c + \sqrt{\frac{\ln{t}}{N_t (a)}} \Bigg]
+    A_t \doteq \argmax_a \Bigg[ Q_t (a) + c * \sqrt{\frac{\ln{t}}{N_t (a)}} \Bigg]
     \label{eq:ch3-upperconfidenceboundactionselection}
 \end{equation}
 
