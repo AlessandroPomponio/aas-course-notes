@@ -23,7 +23,7 @@ In policy gradient methods, the policy can be parametrized in any way, with one 
 A common way to parametrize policies is to form a \textbf{parametrized numerical preference} $h(s,a,\boldsymbol{\theta}) \in \mathbb{R}$ for each state-action pair (this is often the case when the action space is discrete and not too large). The actions with the highest preferences in each state will then be given the highest probabilities of being selected, typically according to an exponential soft-max distribution as such:
 
 \begin{equation}
-    \pi \left(a \middle\vert s, \boldsymbol{\theta} \right) \doteq \frac{e^{h(s,a,\boldsymbol{\theta})}}{\sum_{b} h(s,b,\boldsymbol{\theta})}
+    \pi \left(a \middle\vert s, \boldsymbol{\theta} \right) \doteq \frac{e^{h(s,a,\boldsymbol{\theta})}}{\sum_{b} e^h(s,b,\boldsymbol{\theta})}
     \label{eq:ch8-softmaxinactionpreferencesparametrization}
 \end{equation}
 
